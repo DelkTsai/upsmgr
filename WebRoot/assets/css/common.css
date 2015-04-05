@@ -1,0 +1,15 @@
+* {
+	font-family: "Microsoft YaHei";
+}
+
+.navbar-inverse .navbar-brand {
+	color: #eee;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+	color: #ddd;
+}
+
+.navbar-inverse .navbar-nav>.active>a {
+	background: #428BCA;
+}
