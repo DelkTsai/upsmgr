@@ -63,7 +63,8 @@
 
 			<div class="col-xs-12 main">
 				<div class="form-inline page-header">
-					<select class="form-control" v-model="condition.status" options="statusOptions" style="width:100px;display: inline-block;"></select> <input type="text" class="form-control" v-model="condition.deviceId" placeholder="设备编号" style="width:100px;display: inline-block;" />
+					<select class="form-control" v-model="condition.status" options="statusOptions" style="width:100px;display: inline-block;"></select>
+					 <input type="text" class="form-control" v-model="condition.deviceId" placeholder="设备编号" style="width:100px;display: inline-block;" />
 
 					<button class="btn btn-success" v-on="click:search">
 						<i class="fa fa-search"></i>
@@ -120,7 +121,7 @@
 				$("#save-success").fadeIn(600);
 				dev_list({
 					pageNumber : 1,
-					pageSize : 5
+					pageSize : 5,
 				});
 				setTimeout(function() {
 					$("#save-success").fadeOut(600);
@@ -135,7 +136,7 @@
 		}
 
 		function dev_list(pager) {
-			$.getJSON("dev/list", pager, function(data) {
+			$.getJSON("dev/list", $.extend(pager,vue.condition), function(data) {
 				vue.page = data;
 			});
 		};
@@ -170,13 +171,13 @@
 				show : false,
 				statusOptions : [ {
 					text : '全部',
-					value : '0'
+					value : '-1'
 				}, {
 					text : '正常',
-					value : '1'
+					value : '0'
 				}, {
 					text : '异常',
-					value : '2'
+					value : '1'
 				} ],
 				form : {
 					deviceId : 100000,
@@ -184,7 +185,7 @@
 					comment : "测试数据"
 				},
 				condition : {
-					status : "0",
+					status : "-1",
 					deviceId : ""
 				},
 				header : {
@@ -199,12 +200,9 @@
 			},
 			methods : {
 				search : function() {
-					alert(vue.search.deviceId);
 					dev_list({
-						pageNumber : vue.page.pager.pageNumber,
-						pageSize : vue.page.pager.pageSize,
-						deviceId : vue.search.deviceId,
-						status : vue.search.status
+						pageNumber : 1,
+						pageSize : vue.page.pager.pageSize
 					});
 				},
 				dev_save : function() {

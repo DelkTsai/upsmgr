@@ -1,9 +1,10 @@
 package com.ups.web.module.dev;
 
+import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
-import org.nutz.mvc.adaptor.JsonAdaptor;
-import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
@@ -13,13 +14,17 @@ import com.ups.web.entity.Device;
 import com.ups.web.entity.Result;
 
 @At("/dev")
+@IocBean
 public class DevmgrModule {
-	private DeviceBiz biz = new DeviceBiz();
+	@Inject
+	protected Dao dao;
+	private DeviceBiz biz;
 	private Result rs = new Result();
-
+	
 	@At("/")
 	@Ok("jsp:page.devmgr")
 	public Object index() {
+		biz  = new DeviceBiz(dao);
 		Pager pager = new Pager();
 		pager.setPageNumber(1);
 		pager.setPageSize(5);

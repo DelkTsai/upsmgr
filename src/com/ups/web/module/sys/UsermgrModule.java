@@ -1,6 +1,9 @@
 package com.ups.web.module.sys;
 
+import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.mvc.adaptor.PairAdaptor;
 import org.nutz.mvc.annotation.AdaptBy;
@@ -14,24 +17,28 @@ import com.ups.web.entity.User;
 
 @AdaptBy(type = PairAdaptor.class)
 @At("/sys/user")
+@IocBean
 public class UsermgrModule {
-	private UserBiz biz = new UserBiz();
+	@Inject
+	protected Dao dao;
+	private UserBiz biz;
 	private Result rs = new Result();
 
 	@At("/")
 	@Ok("jsp:page.sysmgr")
 	public Object index() {
+		biz = new UserBiz(dao);
 		Pager pager = new Pager();
 		pager.setPageNumber(1);
 		pager.setPageSize(5);
-		biz.find(pager);
+		biz.find(pager,null);
 		return Json.toJson(biz.page);
 	}
 
 	@At("/list")
 	@Ok("json")
-	public Object list(@Param("..") Pager pager) {
-		biz.find(pager);
+	public Object list(@Param("..") Pager pager,@Param("..") User user) {
+		biz.find(pager,user);
 		return biz.page;
 	}
 

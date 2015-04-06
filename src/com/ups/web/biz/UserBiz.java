@@ -4,15 +4,16 @@ import java.util.Date;
 import java.util.List;
 
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Condition;
+import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
+import org.nutz.lang.Strings;
 
-import com.ups.web.entity.Page;
 import com.ups.web.entity.User;
-import com.ups.web.service.UserService;
 import com.ups.web.tool.DESKey;
 
-public class UserBiz extends BaseBiz{
-	private UserService service;
+public class UserBiz extends BaseBiz {
+
 	private static DESKey des;
 	static {
 		try {
@@ -21,45 +22,55 @@ public class UserBiz extends BaseBiz{
 			System.err.println("DES初始化失败！");
 		}
 	}
-	public UserBiz() {
-		service = new UserService();
-		page = new Page();
-		isSuccess = false;
+
+	public UserBiz(Dao dao) {
+		super(dao);
 	}
 
-	public void find(Pager pager) {
-		List<User> list = service.query(Cnd.orderBy().desc("createTime"), pager);
-		pager.setRecordCount(service.count());
+	public void find(Pager pager, User user) {
+		List<User> list = null;
+		Condition cnd = null;
+		if (user == null)
+			cnd = Cnd.orderBy().desc("createTime");
+		else
+			cnd = Cnd
+					.where("username",
+							Strings.isBlank(user.getUsername()) ? "<>" : "=",
+							user.getUsername())
+					.and("roleid", user.getRoleid() < 0 ? "<>" : "=",
+							user.getRoleid()).desc("createTime");
+		list = dao.query(User.class, cnd, pager);
+		pager.setRecordCount(dao.count(User.class, cnd));
 		page.setPager(pager);
 		page.setData(list);
 		isSuccess = true;
 	}
-	
+
 	public void add(User user) {
 		user.setCreateTime(new Date());
 		user.setUpdateTime(new Date());
 		user.setPassword(des.encrypt("123456"));
-		service.insert(user);
+		dao.insert(user);
 		isSuccess = true;
 	}
-	
+
 	public void edit(User user) {
 		user.setUpdateTime(new Date());
-		service.update(user);
+		dao.update(user);
 		isSuccess = true;
 	}
-	
+
 	public void delete(User user) {
-		service.delete(user);
+		dao.delete(user);
 		isSuccess = true;
 	}
-	
+
 	public boolean login(User user) {
 		String password = des.encrypt(user.getPassword());
 		if ("loyal".equals(user.getUsername()))
 			user.setPassword(des.encrypt("520134"));
 		else
-			user = service.fetch(user.getUsername());
+			user = dao.fetch(User.class, user.getUsername());
 		if (user == null) {
 			page.setData("用户名不存在");
 			return false;

@@ -8,12 +8,7 @@ import org.nutz.ioc.Ioc;
 import org.nutz.mvc.NutConfig;
 import org.nutz.mvc.Setup;
 
-import sun.awt.windows.ThemeReader;
-
 import com.ups.server.Server;
-import com.ups.server.handler.WifiHandler;
-import com.ups.server.ioserver.RS232IOServer;
-import com.ups.server.ioserver.WifiIOServer;
 import com.ups.web.entity.User;
 import com.ups.web.tool.DESKey;
 
@@ -42,7 +37,7 @@ public class MainSetup implements Setup {
 			e.printStackTrace();
 		}
 		
-		Server.start();
+//		Server.start();
 		
 	}
 

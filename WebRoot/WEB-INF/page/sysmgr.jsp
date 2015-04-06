@@ -45,7 +45,8 @@
 										<label for="nickname">昵称</label> <input type="text" class="form-control" id="nickname" placeholder="昵称" v-model="form.nickname">
 									</div>
 									<div class="form-group">
-										<label for="roleid">角色</label> <input type="text" class="form-control" id="roleid" placeholder="角色" v-model="form.roleid">
+										<label for="roleid">角色</label> 
+										<select class="form-control" id="roleid" v-model="form.roleid" options="roleOptions" placeholder="角色" ></select>
 									</div>
 									<div class="form-group">
 										<label for="status">状态</label> <input type="text" class="form-control" id="status" placeholder="状态" v-model="form.status">
@@ -66,22 +67,26 @@
 						</div>
 					</div>
 				</div>
+			
 			</div>
 
 			<div class="col-sm-1 sidebar">
 				<ul class="nav nav-sidebar">
-					<li class="active"><a href="#">用户管理<span class="sr-only"></span></a></li>
+					<li class="active"><a href="javascript:;">用户管理<span class="sr-only"></span></a></li>
+					<!-- 
 					<li><a href="#">角色管理<span class="sr-only"></span></a></li>
 					<li><a href="#"> 组织管理<span class="sr-only"></span></a></li>
 					<li><a href="#"> 菜单管理<span class="sr-only"></span></a></li>
+					 -->
 				</ul>
 			</div>
 
 			<div class="col-xs-12 col-sm-11 col-sm-offset-1 main">
 				<div class="form-inline page-header">
-					<input type="text" class="form-control" v-model="username" placeholder="用户名" style="width:100px;display: inline-block;" /> <input type="text" class="form-control " v-model="roleid" placeholder="角色" style="width:100px;display: inline-block;" />
+					<select class="form-control" v-model="condition.roleid" options="roleOptions" style="width:100px;display: inline-block;"></select>
+					<input type="text" class="form-control" v-model="condition.username" placeholder="用户名" style="width:100px;display: inline-block;" /> 
 					<button class="btn btn-success">
-						<i class="fa fa-search"></i>
+						<i class="fa fa-search" v-on="click:search"></i>
 					</button>
 					<button class="btn btn-success pull-right" v-on="click:user_add">
 						<i class="fa fa-plus"></i> 新增
@@ -154,7 +159,7 @@
 		}
 
 		function user_list(pager) {
-			$.getJSON("sys/user/list", pager, function(data) {
+			$.getJSON("sys/user/list", $.extend(pager,vue.condition), function(data) {
 				vue.page = data;
 			});
 		};
@@ -187,10 +192,29 @@
 			el : "#user",
 			data : {
 				isEdit : false,
+				roleOptions:[ {
+					text : '全部',
+					value : '-1'
+				}, {
+					text : '未分配',
+					value : '0'
+				}, {
+					text : '测试员',
+					value : '1'
+				}, {
+					text : '管理员',
+					value : '2'
+				} ],
 				form : {
-					usericeId : 123456,
-					communicateMethod : 123456,
-					comment : 123456
+					username : "test",
+					nickname : "测试员",
+					roleid : 0,
+					status : 0,
+					comment : "测试数据"
+				},
+				condition : {
+					username : null,
+					roleid : -1
 				},
 				header : {
 					index : "#",
@@ -203,6 +227,12 @@
 				page : ${obj}
 			},
 			methods : {
+				search : function() {
+					user_list({
+						pageNumber : 1,
+						pageSize : vue.page.pager.pageSize
+					});
+				},
 				user_save : function() {
 					if (!vue.isEdit) {
 						$.post("sys/user/add", vue.form, function(data) {

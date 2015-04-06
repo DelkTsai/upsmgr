@@ -5,7 +5,9 @@ var ioc = {
 			refer : "mysql"
 		} ]
 	},
-
+	biz : {
+		type : "org.nutz.dao.impl.NutDao"
+	},
 	mysql : {
 		type : "com.alibaba.druid.pool.DruidDataSource",
 		events : {
@@ -18,7 +20,8 @@ var ioc = {
 			username : "luoya",
 			password : "123",
 			testWhileIdle : true,
-			maxActive : 100
+			validationQuery : "select 1" ,
+            maxActive : 100
 		}
 	},
 	sqlserver : {
