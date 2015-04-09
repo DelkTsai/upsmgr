@@ -27,7 +27,7 @@
 					<div class="col-xs-12" id="chart" style="height: 300px;"></div>
 				</div>
 
-				<h3 class="sub-header text-primary">设备实时信息</h3>
+				<h3 class="sub-header text-primary">设备历史数据</h3>
 				<div class="table-responsive">
 					<table class="table table-striped">
 						<thead>
@@ -37,17 +37,21 @@
 								<th>输出电压</th>
 								<th>电池电压</th>
 								<th>负载</th>
-								<th>工作状态</th>
+								<th>数据时间</th>
+								<th>通信方式</th>
+								<th>备注</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-repeat="tabelData.td">
+							<tr v-repeat="page.devdata">
 								<td>{{$index+1}}</td>
-								<td>{{deviceid}}</td>
-								<td>{{outvoltage}}</td>
-								<td>{{cellvoltage}}</td>
-								<td>{{load}}</td>
-								<td>{{status}}</td>
+								<td>{{deviceId}}</td>
+								<td>{{outputVoltage}}</td>
+								<td>{{batteryVoltage}}</td>
+								<td>{{batteryLoad}}</td>
+								<td>{{dataTime}}</td>
+								<td>{{communicateMethod}}</td>
+								<td>{{comment}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -84,7 +88,29 @@
 		});
 	</script>
 
+	
+
 	<script type="text/javascript">
+		var vue = new Vue({
+			el : "#home",
+			data : {
+				page : ${obj}
+			}
+		});
+	</script>
+
+	<script type="text/javascript">
+	
+		var outputVoltage = [];
+		var batteryVoltage = [];
+		var batteryLoad = [];
+		
+		$(vue.page.devdata).each(function(index,item) {
+			outputVoltage.push(item.outputVoltage);
+			batteryVoltage.push(item.batteryVoltage);
+			batteryLoad.push(item.batteryLoad);
+		});
+	
 		function getLabel() {
 			var label = [];
 			for (var i = 0; i < 25; i++) {
@@ -136,27 +162,22 @@
 						name : '输出电压',
 						type : 'line',
 						stack : '总量',
-						data : [ 150, 232, 201, 154, 190, 330, 410, 232, 201,
-								154, 190, 330, 410, 232, 201, 154, 190, 330,
-								410, 232, 201, 154, 190, 330, 410, 232, 201,
-								154 ]
+						//data : outputVoltage
+						data : outputVoltage
 					},
 					{
 						name : '电池电压',
 						type : 'line',
 						stack : '总量',
-						data : [ 320, 332, 301, 334, 390, 330, 320, 320, 332,
-								301, 334, 390, 330, 320, 320, 332, 301, 334,
-								390, 330, 320, 320, 332, 301, 334, 390, 330,
-								320, 320 ]
+						//data : batteryVoltage
+						data : batteryVoltage
 					},
 					{
 						name : '负载',
 						type : 'line',
 						stack : '总量',
-						data : [ 820, 932, 901, 934, 1290, 1330, 1320, 820,
-								932, 901, 934, 1290, 1330, 1320, 820, 932, 901,
-								934, 1290, 1330, 1320, 820, 932, 901, 934, 1290 ]
+						//data : batteryLoad
+						data : batteryLoad
 					} ]
 		};
 
@@ -165,37 +186,6 @@
 		window.onresize = myChart.resize;
 	</script>
 
-	<script type="text/javascript">
-		function getDevInfo() {
-			var info = [];
-			for (var int = 0; int < 5; int++) {
-				info.push({
-					deviceid : 10000+int,
-					outvoltage : 23 + "V",
-					cellvoltage : 10 + "V",
-					load : 25,
-					status : "正常"
-				});
-			}
-			return info;
-		}
-		var main = new Vue({
-			el : "#home",
-			data : {
-				tabelData : {
-					th : {
-						index : "#",
-						deviceid : "设备编号",
-						outvoltage : "输出电压",
-						cellvoltage : "电池电压",
-						load : "负载",
-						status : "工作状态"
-					},
-					td : getDevInfo()
-				}
-			}
-		});
-	</script>
 
 </body>
 </html>

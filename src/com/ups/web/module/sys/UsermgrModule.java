@@ -1,86 +1,87 @@
 package com.ups.web.module.sys;
 
-import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
+import org.nutz.lang.util.NutMap;
 import org.nutz.mvc.adaptor.PairAdaptor;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
-import com.ups.web.biz.UserBiz;
-import com.ups.web.entity.Result;
 import com.ups.web.entity.User;
+import com.ups.web.service.UserService;
 
+//用户管理的Controller类
+//该类的方法为Action对应用户的每个操作
 @AdaptBy(type = PairAdaptor.class)
 @At("/sys/user")
 @IocBean
 public class UsermgrModule {
-	@Inject
-	protected Dao dao;
-	private UserBiz biz;
-	private Result rs = new Result();
+	
+	//注入Service
+	@Inject("userService")
+	private UserService service;
+	// 创建请求结果对象（用于返回增、删、改操作结果给用户）
+	private NutMap rs = new NutMap();
 
+	//用户管理页面初始化
 	@At("/")
-	@Ok("jsp:page.sysmgr")
+	@Ok("jsp:page.sysmgr")//返回视图
 	public Object index() {
-		biz = new UserBiz(dao);
 		Pager pager = new Pager();
 		pager.setPageNumber(1);
 		pager.setPageSize(5);
-		biz.find(pager,null);
-		return Json.toJson(biz.page);
+		service.find(pager,null);
+		return Json.toJson(service.page);
 	}
 
+	//用户分页查询
 	@At("/list")
-	@Ok("json")
+	@Ok("json")//返回json数据
 	public Object list(@Param("..") Pager pager,@Param("..") User user) {
-		biz.find(pager,user);
-		return biz.page;
+		service.find(pager,user);
+		return service.page;
 	}
 
+	//用户添加
 	@At("/add")
-	@Ok("json")
+	@Ok("json")//返回json数据
 	public Object add(@Param("..") User user) {
-		biz.add(user);
-		if (biz.isSuccess) {
-			rs.setSuccess(true);
-			rs.setMsg("添加成功，用户名：" + user.getUsername());
+		service.add(user);
+		if (service.isSuccess) {
+			rs.setv("isSuccess",true).setv("msg", "添加成功，用户名：" + user.getUsername());
 		} else {
-			rs.setSuccess(false);
-			rs.setMsg("添加失败，用户名：" + user.getUsername());
+			rs.setv("isSuccess",false).setv("msg", "添加失败，用户名：" + user.getUsername());
 		}
 		return rs;
 
 	}
 
+	//用户编辑
 	@At("/edit")
-	@Ok("json")
+	@Ok("json")//返回json数据
 	public Object edit(@Param("..") User user) {
-		biz.edit(user);
-		if (biz.isSuccess) {
-			rs.setSuccess(true);
-			rs.setMsg("修改成功，用户名：" + user.getUsername());
+		service.edit(user);
+		if (service.isSuccess) {
+			rs.setv("isSuccess",true).setv("msg", "修改成功，用户名：" + user.getUsername());
 		} else {
-			rs.setSuccess(false);
-			rs.setMsg("修改失败，用户名：" + user.getUsername());
+			rs.setv("isSuccess",false).setv("msg", "修改失败，用户名：" + user.getUsername());
 		}
 		return rs;
 	}
 
+	//用户删除
 	@At("/delete")
-	@Ok("json")
+	@Ok("json")//返回json数据
 	public Object delete(@Param("..") User user) {
-		biz.delete(user);
-		if (biz.isSuccess) {
-			rs.setSuccess(true);
-			rs.setMsg("删除成功，用户名：" + user.getUsername());
+		service.delete(user);
+		if (service.isSuccess) {
+			rs.setv("isSuccess",true).setv("msg", "删除成功，用户名：" + user.getUsername());
 		} else {
-			rs.setSuccess(false);
-			rs.setMsg("删除失败，用户名：" + user.getUsername());
+			rs.setv("isSuccess",false).setv("msg", "删除失败，用户名：" + user.getUsername());
 		}
 		return rs;
 	}

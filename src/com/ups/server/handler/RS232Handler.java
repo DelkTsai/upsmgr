@@ -8,19 +8,19 @@ import java.io.OutputStream;
 import java.net.SocketException;
 
 public class RS232Handler implements Runnable {
-	
+
 	private SerialPort port = null;
-	private InputStream inputStream= null;
-	private OutputStream outputStream =null;
+	private InputStream inputStream = null;
+	private OutputStream outputStream = null;
 	private byte[] b = new byte[1024];
 	private boolean runFlag = true;
-	
+
 	public RS232Handler() {
 		super();
 	}
 
 	public RS232Handler(SerialPort port) {
-		if (null==port) {
+		if (null == port) {
 			System.out.println("port is null");
 			this.runFlag = false;
 			return;
@@ -30,12 +30,12 @@ public class RS232Handler implements Runnable {
 
 	@Override
 	public void run() {
-		
+
 		try {
 			inputStream = port.getInputStream();
 			outputStream = port.getOutputStream();
 			if (runFlag) {
-				if (port==null) {
+				if (port == null) {
 					System.out.println("Port is closed");
 					runFlag = false;
 					return;
@@ -43,10 +43,7 @@ public class RS232Handler implements Runnable {
 				int len = -1;
 				try {
 					if ((len = inputStream.read(b)) != -1) {
-//						System.out.println("Port recive:"
-//								+ new String(b, 0, len));
-//						outputStream.write(b);
-//						outputStream.flush();
+						// 将串口输入流中数据存到缓存中
 						ServerCache.data.append(new String(b, 0, len));
 						ServerCache.dataUpdate = true;
 					} else {

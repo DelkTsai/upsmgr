@@ -60,7 +60,7 @@
 								<button type="button" class="btn btn-danger" data-dismiss="modal">
 									<i class="fa fa-close"></i>&nbsp;关闭
 								</button>
-								<button type="button" class="btn btn-success" v-on="click:user_save">
+								<button type="button" class="btn btn-success" v-on="click:data_save">
 									<i class="fa fa-save"></i>&nbsp;保存
 								</button>
 							</div>
@@ -88,7 +88,7 @@
 					<button class="btn btn-success">
 						<i class="fa fa-search" v-on="click:search"></i>
 					</button>
-					<button class="btn btn-success pull-right" v-on="click:user_add">
+					<button class="btn btn-success pull-right" v-on="click:data_add">
 						<i class="fa fa-plus"></i> 新增
 					</button>
 				</div>
@@ -108,7 +108,7 @@
 						</thead>
 						<tbody>
 							<tr v-repeat="page.data">
-								<td><a title="编辑" href="javascript:;" v-on="click:user_edit((page.pager.pageNumber-1)*page.pager.pageSize+$index)"><i class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;<a title="删除" v-on="click:user_delete((page.pager.pageNumber-1)*page.pager.pageSize+$index)" href="javascript:;"><i class="fa fa-trash fa-lg text-danger"></i></a> &nbsp;&nbsp;&nbsp;{{(page.pager.pageNumber-1)*page.pager.pageSize+$index+1}}</td>
+								<td><a title="编辑" href="javascript:;" v-on="click:data_edit((page.pager.pageNumber-1)*page.pager.pageSize+$index)"><i class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;<a title="删除" v-on="click:data_delete((page.pager.pageNumber-1)*page.pager.pageSize+$index)" href="javascript:;"><i class="fa fa-trash fa-lg text-danger"></i></a> &nbsp;&nbsp;&nbsp;{{(page.pager.pageNumber-1)*page.pager.pageSize+$index+1}}</td>
 								<td>{{username}}</td>
 								<td>{{nickname}}</td>
 								<td>{{roleid}}</td>
@@ -142,7 +142,7 @@
 			if (success) {
 				$("#save-success .msg").text(msg);
 				$("#save-success").fadeIn(600);
-				user_list({
+				data_list({
 					pageNumber : 1,
 					pageSize : 5
 				});
@@ -158,7 +158,7 @@
 			}
 		}
 
-		function user_list(pager) {
+		function data_list(pager) {
 			$.getJSON("sys/user/list", $.extend(pager,vue.condition), function(data) {
 				vue.page = data;
 			});
@@ -166,7 +166,7 @@
 
 		function size_change(obj) {
 			vue.page.pager.pageSize = $(obj).val();
-			user_list({
+			data_list({
 				pageNumber : 1,
 				pageSize : vue.page.pager.pageSize
 			});
@@ -182,7 +182,7 @@
 			} else {
 				vue.page.pager.pageNumber = $(obj).val();
 			}
-			user_list({
+			data_list({
 				pageNumber : vue.page.pager.pageNumber,
 				pageSize : vue.page.pager.pageSize
 			});
@@ -228,12 +228,12 @@
 			},
 			methods : {
 				search : function() {
-					user_list({
+					data_list({
 						pageNumber : 1,
 						pageSize : vue.page.pager.pageSize
 					});
 				},
-				user_save : function() {
+				data_save : function() {
 					if (!vue.isEdit) {
 						$.post("sys/user/add", vue.form, function(data) {
 							showSuccess(data.isSuccess, data.msg);
@@ -245,7 +245,7 @@
 					}
 				},
 
-				user_delete : function(rowid) {
+				data_delete : function(rowid) {
 					if (confirm("确认删除设备：" + vue.page.data[rowid].username)) {
 						$.post("sys/user/delete", vue.page.data[rowid],
 								function(data) {
@@ -254,12 +254,12 @@
 					}
 				},
 
-				user_edit : function(rowid) {
+				data_edit : function(rowid) {
 					$('#myModal').modal('show');
 					vue.form = clone(vue.page.data[rowid]);
 					vue.isEdit = true;
 				},
-				user_add : function() {
+				data_add : function() {
 					$('#myModal').modal('show');
 					$("#user-editor")[0].reset();
 					vue.isEdit = false;
@@ -268,7 +268,7 @@
 				nextPage : function() {
 					if (vue.page.pager.pageNumber == vue.page.pager.pageCount)
 						return;
-					user_list({
+					data_list({
 						pageNumber : vue.page.pager.pageNumber + 1,
 						pageSize : vue.page.pager.pageSize
 					});
@@ -276,7 +276,7 @@
 				previousPage : function() {
 					if (vue.page.pager.pageNumber == 1)
 						return;
-					user_list({
+					data_list({
 						pageNumber : vue.page.pager.pageNumber - 1,
 						pageSize : vue.page.pager.pageSize
 					});
@@ -284,7 +284,7 @@
 				firstPage : function() {
 					if (vue.page.pager.pageNumber == 1)
 						return;
-					user_list({
+					data_list({
 						pageNumber : 1,
 						pageSize : vue.page.pager.pageSize
 					});
@@ -292,7 +292,7 @@
 				lastPage : function() {
 					if (vue.page.pager.pageNumber == vue.page.pager.pageCount)
 						return;
-					user_list({
+					data_list({
 						pageNumber : vue.page.pager.pageCount,
 						pageSize : vue.page.pager.pageSize
 					});

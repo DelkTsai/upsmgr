@@ -38,10 +38,7 @@ public class WifiHandler extends Thread {
 				int len = -1;
 				try {
 					if ((len = inputStream.read(b)) != -1) {
-//						System.out.println("Server recive:"
-//								+ new String(b, 0, len));
-//						outputStream.write(b);
-//						outputStream.flush();
+						// 将socket输入流中数据存到缓存中
 						ServerCache.data.append(new String(b, 0, len));
 						ServerCache.dataUpdate = true;
 					} else {

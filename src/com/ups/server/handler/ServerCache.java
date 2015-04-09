@@ -3,15 +3,13 @@ package com.ups.server.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ups.web.entity.DeviceData;
+
 public class ServerCache extends Thread {
 	public static StringBuilder data = new StringBuilder();
-	public static List<Object> objList = new ArrayList<Object>();
+	public static List<DeviceData> objList = new ArrayList<DeviceData>();
 	public static boolean dataUpdate = false;
 	public static boolean objUpdate = false;
-	
-	public ServerCache() {
-		
-	}
 	
 	@Override
 	public void run() {

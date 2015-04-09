@@ -17,8 +17,8 @@ var ioc = {
 		fields : {
 			driverClassName : "com.mysql.jdbc.Driver",
 			url : "jdbc:mysql://127.0.0.1/upsmgr?useUnicode=true&characterEncoding=utf8",
-			username : "luoya",
-			password : "123",
+			username : "root",
+			password : "520134",
 			testWhileIdle : true,
 			validationQuery : "select 1" ,
             maxActive : 100

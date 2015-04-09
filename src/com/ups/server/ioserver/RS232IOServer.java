@@ -28,34 +28,9 @@ public class RS232IOServer extends Thread implements SerialPortEventListener {
 
 	// 构造方法、实例化、参数设置
 	public RS232IOServer() {
-		
+
 	}
 
-	private void init() {
-//		System.out.println("获取端口实例");
-		ports = CommPortIdentifier.getPortIdentifiers();
-		while (ports.hasMoreElements()) {
-			cpi = (CommPortIdentifier) ports.nextElement();
-			if (cpi.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-				if (cpi.getName().equals("COM2")) {
-					try {
-						//实例化串口对象
-						port = (SerialPort) cpi.open("UPSIO", 2000);
-						//设置串口监听
-						port.addEventListener(this);
-						//启用串口监听
-						port.notifyOnDataAvailable(true);
-						
-						System.out.println("**************串口监听已打开，等待设备通信**************");
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-	}
-	
 	public void serialEvent(SerialPortEvent event) {
 		switch (event.getEventType()) {
 		case SerialPortEvent.BI:
@@ -85,12 +60,30 @@ public class RS232IOServer extends Thread implements SerialPortEventListener {
 		}
 	}
 
-	public void save(){
-		
-	}
-	
 	@Override
 	public void run() {
-		init();
+		// System.out.println("获取端口实例");
+		ports = CommPortIdentifier.getPortIdentifiers();
+		while (ports.hasMoreElements()) {
+			cpi = (CommPortIdentifier) ports.nextElement();
+			if (cpi.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+				if (cpi.getName().equals("COM2")) {
+					try {
+						// 实例化串口对象
+						port = (SerialPort) cpi.open("UPSIO", 2000);
+						// 设置串口监听
+						port.addEventListener(this);
+						// 启用串口监听
+						port.notifyOnDataAvailable(true);
+
+						System.out
+								.println("**************串口监听已打开，等待设备通信**************");
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 }

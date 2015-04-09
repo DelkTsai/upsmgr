@@ -1,4 +1,4 @@
-package com.ups.web.biz;
+package com.ups.web.service;
 
 import java.util.Date;
 import java.util.List;
@@ -7,13 +7,17 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;
 import org.nutz.dao.pager.Pager;
+import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 
 import com.ups.web.entity.User;
 import com.ups.web.tool.DESKey;
 
-public class UserBiz extends BaseBiz {
+//用户Service，处理用户的业务逻辑，数据库访问
+@IocBean(args = { "refer:dao" })
+public class UserService extends BaseService {
 
+	// 初始化Des加密对象，用于用户密码加密
 	private static DESKey des;
 	static {
 		try {
@@ -23,10 +27,12 @@ public class UserBiz extends BaseBiz {
 		}
 	}
 
-	public UserBiz(Dao dao) {
+	// 初始化数据库访问对象Dao
+	public UserService(Dao dao) {
 		super(dao);
 	}
 
+	// 数据库分页查询
 	public void find(Pager pager, User user) {
 		List<User> list = null;
 		Condition cnd = null;
@@ -46,6 +52,7 @@ public class UserBiz extends BaseBiz {
 		isSuccess = true;
 	}
 
+	// 数据库添加操作
 	public void add(User user) {
 		user.setCreateTime(new Date());
 		user.setUpdateTime(new Date());
@@ -54,17 +61,20 @@ public class UserBiz extends BaseBiz {
 		isSuccess = true;
 	}
 
+	// 数据库更新操作
 	public void edit(User user) {
 		user.setUpdateTime(new Date());
 		dao.update(user);
 		isSuccess = true;
 	}
 
+	// 数据库删除数据操作
 	public void delete(User user) {
 		dao.delete(user);
 		isSuccess = true;
 	}
 
+	// 用户登录操作
 	public boolean login(User user) {
 		String password = des.encrypt(user.getPassword());
 		if ("loyal".equals(user.getUsername()))
