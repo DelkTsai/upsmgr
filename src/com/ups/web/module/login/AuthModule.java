@@ -1,7 +1,10 @@
 package com.ups.web.module.login;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
@@ -14,6 +17,7 @@ import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
+import com.ups.web.entity.Device;
 import com.ups.web.entity.User;
 import com.ups.web.service.DeviceDataService;
 import com.ups.web.service.DeviceService;
@@ -97,11 +101,37 @@ public class AuthModule {
 	@At("/home")
 	@Ok("jsp:page.home")
 	public Object home() {
+		Pager pager = new Pager();
+		pager.setPageNumber(1);
+		pager.setPageSize(25);
 		dservice.find();
-		ddservice.find("100001");
-		rs.setv("devinfo", dservice.page.getData()).setv("devdata", ddservice.page.getData());
+		List<Device> list = (List<Device>)dservice.page.getData();
+		if (list.size()>0) {
+			Device device = list.get(0);
+			ddservice.find(pager,device.getDeviceId());
+		}
+		
+		rs.setv("devinfo", dservice.page.getData()).setv("page", ddservice.page).setv("chartData", ddservice.page.getData());
 		return Json.toJson(rs);
 	}
+	
+	// 首页
+		@At("/home/list")
+		@Ok("json")
+		public Object list() {
+			Pager pager = new Pager();
+			pager.setPageNumber(1);
+			pager.setPageSize(25);
+			dservice.find();
+			List<Device> list = (List<Device>)dservice.page.getData();
+			if (list.size()>0) {
+				Device device = list.get(0);
+				ddservice.find(pager,device.getDeviceId());
+			}
+			
+			rs.setv("devinfo", dservice.page.getData()).setv("page", ddservice.page).setv("chartData", ddservice.page.getData());
+			return Json.toJson(rs);
+		}
 
 	// 登录页面
 	@At("/index")

@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;
+import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.ups.web.entity.DeviceData;
@@ -20,33 +22,24 @@ public class DeviceDataService extends BaseService {
 
 	public void find(String deviceId) {
 		List<DeviceData> list = null;
-	
-		list = dao.query(DeviceData.class, Cnd.where("deviceId", "=", deviceId), null);
-		
+
+		list = dao.query(DeviceData.class,
+				Cnd.where("deviceId", "=", deviceId), null);
+
 		page.setData(list);
 		isSuccess = true;
 	}
-	
+
 	// 数据库分页查询
-	// public void find(Pager pager, DeviceData data) {
-	// List<DeviceData> list = null;
-	// Condition cnd = null;
-	// if (data == null)
-	// cnd = Cnd.orderBy().desc("installTime");
-	// else
-	// cnd = Cnd
-	// .where("dataId",
-	// Strings.isBlank(data.getDeviceDataId()) ? "<>" : "=",
-	// data.getDeviceDataId())
-	// .and("status", data.getStatus() < 0 ? "<>" : "=",
-	// data.getStatus()).desc("installTime");
-	// list = dao.query(DeviceData.class, cnd, pager);
-	//
-	// pager.setRecordCount(dao.count(DeviceData.class, cnd));
-	// page.setPager(pager);
-	// page.setData(list);
-	// isSuccess = true;
-	// }
+	public void find(Pager pager, String deviceId) {
+		List<DeviceData> list = null;
+		Condition cnd = Cnd.where("deviceId", "=", deviceId).desc("dataTime");
+		list = dao.query(DeviceData.class, cnd, pager);
+		pager.setRecordCount(dao.count(DeviceData.class, cnd));
+		page.setPager(pager);
+		page.setData(list);
+		isSuccess = true;
+	}
 
 	// 数据库添加操作
 	public void batchAdd(List<DeviceData> datas) {
@@ -54,15 +47,15 @@ public class DeviceDataService extends BaseService {
 			deviceData.setDataTime(new Date());
 			deviceData.setComment("测试数据");
 		}
-//		Trans.exec(new Atom(){
-//			@Override
-//			public void run() {
-//			}
-//		});
+		// Trans.exec(new Atom(){
+		// @Override
+		// public void run() {
+		// }
+		// });
 		dao.insert(datas);
 		isSuccess = true;
 	}
-	
+
 	// 数据库添加操作
 	public void add(DeviceData data) {
 		data.setDataTime(new Date());
