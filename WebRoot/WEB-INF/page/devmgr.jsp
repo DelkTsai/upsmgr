@@ -90,8 +90,8 @@
 								<td><a title="编辑" href="javascript:;" v-on="click:data_edit((page.pager.pageNumber-1)*page.pager.pageSize+$index)"><i class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;<a title="删除" v-on="click:data_delete((page.pager.pageNumber-1)*page.pager.pageSize+$index)" href="javascript:;"><i class="fa fa-trash fa-lg text-danger"></i></a> &nbsp;&nbsp;&nbsp;{{(page.pager.pageNumber-1)*page.pager.pageSize+$index+1}}</td>
 								<td>{{deviceId}}</td>
 								<td>{{installTime}}</td>
-								<td>{{communicateMethod}}</td>
-								<td>{{status}}</td>
+								<td>{{communicateMethod==0?'WIFI':'RS232'}}</td>
+								<td>{{status==0?'正常':'异常'}}</td>
 								<td>{{comment}}</td>
 							</tr>
 						</tbody>
@@ -202,16 +202,16 @@
 				search : function() {
 					data_list({
 						pageNumber : 1,
-						pageSize : vue.page.pager.pageSize
+						pageSize : this.page.pager.pageSize
 					});
 				},
 				data_save : function() {
-					if (!vue.show) {
-						$.post("dev/add", vue.form, function(data) {
+					if (!this.show) {
+						$.post("dev/add", this.form, function(data) {
 							showSuccess(data.isSuccess, data.msg);
 						}, "json");
 					} else {
-						$.post("dev/edit", vue.form, function(data) {
+						$.post("dev/edit", this.form, function(data) {
 							showSuccess(data.isSuccess, data.msg);
 						}, "json");
 					}
@@ -219,52 +219,52 @@
 
 				data_edit : function(rowid) {
 					$('#myModal').modal('show');
-					vue.form = clone(vue.page.data[rowid]);
-					vue.show = true;
+					this.form = clone(this.page.data[rowid]);
+					this.show = true;
 				},
 				data_add : function() {
 					$('#myModal').modal('show');
 					$("#dev-editor")[0].reset();
-					vue.show = false;
+					this.show = false;
 				},
 				data_delete : function(rowid) {
-					if (confirm("确认删除设备：" + vue.page.data[rowid].deviceId)) {
-						$.post("dev/delete", vue.page.data[rowid], function(
+					if (confirm("确认删除设备：" + this.page.data[rowid].deviceId)) {
+						$.post("dev/delete", this.page.data[rowid], function(
 								data) {
 							showSuccess(data.isSuccess, data.msg);
 						}, "json");
 					}
 				},
 				nextPage : function() {
-					if (vue.page.pager.pageNumber == vue.page.pager.pageCount)
+					if (this.page.pager.pageNumber == this.page.pager.pageCount)
 						return;
 					data_list({
-						pageNumber : vue.page.pager.pageNumber + 1,
-						pageSize : vue.page.pager.pageSize
+						pageNumber : this.page.pager.pageNumber + 1,
+						pageSize : this.page.pager.pageSize
 					});
 				},
 				previousPage : function() {
-					if (vue.page.pager.pageNumber == 1)
+					if (this.page.pager.pageNumber == 1)
 						return;
 					data_list({
-						pageNumber : vue.page.pager.pageNumber - 1,
-						pageSize : vue.page.pager.pageSize
+						pageNumber : this.page.pager.pageNumber - 1,
+						pageSize : this.page.pager.pageSize
 					});
 				},
 				firstPage : function() {
-					if (vue.page.pager.pageNumber == 1)
+					if (this.page.pager.pageNumber == 1)
 						return;
 					data_list({
 						pageNumber : 1,
-						pageSize : vue.page.pager.pageSize
+						pageSize : this.page.pager.pageSize
 					});
 				},
 				lastPage : function() {
-					if (vue.page.pager.pageNumber == vue.page.pager.pageCount)
+					if (this.page.pager.pageNumber == this.page.pager.pageCount)
 						return;
 					data_list({
-						pageNumber : vue.page.pager.pageCount,
-						pageSize : vue.page.pager.pageSize
+						pageNumber : this.page.pager.pageCount,
+						pageSize : this.page.pager.pageSize
 					});
 				}
 			}

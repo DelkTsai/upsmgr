@@ -13,6 +13,11 @@
 <base href="<%=path%>/">
 <title>首页-UPS管理系统</title>
 <%@include file="share/header.jsp"%>
+<style type="text/css">
+#device-info option{
+	height: 50px;
+}
+</style>
 </head>
 
 <body>
@@ -23,9 +28,7 @@
 		<div class="row">
 			<div class="col-xs-12 main" id="home">
 				<h1 class="page-header text-primary">
-					仪表盘 <select class="form-control pull-right" id="roleid"
-						v-model="selected" options="options" placeholder="设备"
-						style="display: inline-block;width: 350px;"></select>
+					仪表盘 <select class="form-control pull-right" id="device-info" v-model="selected" options="options" placeholder="设备" style="display: inline-block;width: 400px;" onchange="select_change(this)"></select>
 				</h1>
 				<div class="row placeholders">
 					<div class="col-xs-12" id="chart" style="height: 300px;"></div>
@@ -54,7 +57,7 @@
 								<td>{{batteryVoltage}}</td>
 								<td>{{batteryLoad}}</td>
 								<td>{{dataTime}}</td>
-								<td>{{communicateMethod}}</td>
+								<td>{{communicateMethod==0?'WIFI':'RS232'}}</td>
 								<td>{{comment}}</td>
 							</tr>
 						</tbody>
@@ -97,12 +100,28 @@
 		});
 	</script>
 
-
-
 	<script type="text/javascript">
+		function getLabel() {
+			var label = [];
+			for (var i = 0; i < 25; i++) {
+				label.push('' + i + ":00");
+			}
+			return label;
+		}
+
+		function data_chart() {
+			$.getJSON("devdata/chart", {
+				deviceId : vue.selected
+			}, function(data) {
+				vue.chart.chartData = getChartData(data);
+				refresh_chart();
+			});
+		};
+
 		function data_list(pager) {
-			$.getJSON("devdata/list", $.extend(pager, vue.condition), function(
-					data) {
+			$.getJSON("devdata/list", $.extend(pager, {
+				deviceId : vue.selected
+			}), function(data) {
 				vue.page = data;
 			});
 		};
@@ -131,52 +150,139 @@
 			});
 		};
 		var ddata = ${obj};
+
+		function getChartData(chartData) {
+			var outputVoltage = [];
+			var batteryVoltage = [];
+			var batteryLoad = [];
+
+			$(chartData).each(function(index, item) {
+				outputVoltage.push(item.outputVoltage);
+				batteryVoltage.push(item.batteryVoltage);
+				batteryLoad.push(item.batteryLoad);
+			});
+			return {
+				outputVoltage : outputVoltage,
+				batteryVoltage : batteryVoltage,
+				batteryLoad : batteryLoad
+			};
+		}
+
+		function getOption() {
+			var op = [];
+			$(ddata.devinfo).each(
+					function(index, item) {
+						op.push({
+							text : "设备编号：" + item.deviceId + " | " + "通信方式："
+									+( item.communicateMethod==0?"WIFI":"RS232") + " | " + "状态："
+									+ (item.status==0?"正常":"异常"),
+							value : item.deviceId
+						});
+					});
+			return op;
+		}
+
 		var vue = new Vue({
 			el : "#home",
 			data : {
+				selected : "100001",
+				options : getOption(),
+				chart : {
+					option : {
+						tooltip : {
+							trigger : 'axis'
+						},
+						legend : {
+							data : [ '输出电压', '电池电压', '负载' ]
+						},
+						toolbox : {
+							show : false,
+							feature : {
+								mark : {
+									show : true
+								},
+								dataView : {
+									show : true,
+									readOnly : false
+								},
+								magicType : {
+									show : true,
+									type : [ 'line', 'bar', 'stack', 'tiled' ]
+								},
+								restore : {
+									show : true
+								},
+								saveAsImage : {
+									show : true
+								}
+							}
+						},
+						calculable : true,
+						xAxis : [ {
+							type : 'category',
+							boundaryGap : false,
+							data : getLabel()
+						} ],
+						yAxis : [ {
+							type : 'value'
+						} ],
+						series : [ {
+							name : '输出电压',
+							type : 'line',
+							stack : '总量',
+							//data : outputVoltage
+							data : []
+						}, {
+							name : '电池电压',
+							type : 'line',
+							stack : '总量',
+							//data : batteryVoltage
+							data : []
+						}, {
+							name : '负载',
+							type : 'line',
+							stack : '总量',
+							//data : batteryLoad
+							data : []
+						} ]
+					},
+					myChart : echarts.init(document.getElementById("chart")),
+					chartData : getChartData(ddata.chartData)
+				},
 				page : ddata.page,
-				data : ddata.data,
-				chartData : ddata.chartData,
-				selected:"100001",
-				options: (function() {
-					var op = [];
-					$(ddata.devinfo).each(function(index,item) {
-						op.push({text:"设备编号："+item.deviceId+" | "+"通信方式："+item.communicateMethod+" | "+"状态："+item.status,value:item.deviceId});
-					});
-					return op;
-				})()
+				data : ddata.data
 			},
 			methods : {
 				nextPage : function() {
-					if (vue.page.pager.pageNumber == vue.page.pager.pageCount)
+					if (this.page.pager.pageNumber == this.page.pager.pageCount)
 						return;
 					data_list({
-						pageNumber : vue.page.pager.pageNumber + 1,
-						pageSize : vue.page.pager.pageSize
+						pageNumber : this.page.pager.pageNumber + 1,
+						pageSize : this.page.pager.pageSize
 					});
 				},
 				previousPage : function() {
-					if (vue.page.pager.pageNumber == 1)
+					if (this.page.pager.pageNumber == 1)
 						return;
 					data_list({
-						pageNumber : vue.page.pager.pageNumber - 1,
-						pageSize : vue.page.pager.pageSize
+						pageNumber : this.page.pager.pageNumber - 1,
+						pageSize : this.page.pager.pageSize
 					});
 				},
 				firstPage : function() {
-					if (vue.page.pager.pageNumber == 1)
+					if (this.page.pager.pageNumber == 1)
 						return;
 					data_list({
 						pageNumber : 1,
-						pageSize : vue.page.pager.pageSize
+						pageSize : this.page.pager.pageSize
 					});
 				},
 				lastPage : function() {
-					if (vue.page.pager.pageNumber == vue.page.pager.pageCount)
+					if (this.page.pager.pageNumber == this.page.pager.pageCount)
 						return;
 					data_list({
-						pageNumber : vue.page.pager.pageCount,
-						pageSize : vue.page.pager.pageSize
+						pageNumber : this.page.pager.pageCount,
+						pageSize : this.page.pager.pageSize
 					});
 				}
 			}
@@ -184,86 +290,25 @@
 	</script>
 
 	<script type="text/javascript">
-		var outputVoltage = [];
-		var batteryVoltage = [];
-		var batteryLoad = [];
-
-		$(vue.chartData).each(function(index, item) {
-			outputVoltage.push(item.outputVoltage);
-			batteryVoltage.push(item.batteryVoltage);
-			batteryLoad.push(item.batteryLoad);
-		});
-
-		function getLabel() {
-			var label = [];
-			for (var i = 0; i < 25; i++) {
-				label.push('' + i + ":00");
-			}
-			return label;
+		function refresh_chart() {
+			vue.chart.option.series[0].data = vue.chart.chartData.outputVoltage;
+			vue.chart.option.series[1].data = vue.chart.chartData.batteryVoltage;
+			vue.chart.option.series[2].data = vue.chart.chartData.batteryLoad;
+			vue.chart.myChart.setOption(vue.chart.option);
 		}
-		var myChart = echarts.init(document.getElementById("chart"));
-		var option = {
-			tooltip : {
-				trigger : 'axis'
-			},
-			legend : {
-				data : [ '输出电压', '电池电压', '负载' ]
-			},
-			toolbox : {
-				show : false,
-				feature : {
-					mark : {
-						show : true
-					},
-					dataView : {
-						show : true,
-						readOnly : false
-					},
-					magicType : {
-						show : true,
-						type : [ 'line', 'bar', 'stack', 'tiled' ]
-					},
-					restore : {
-						show : true
-					},
-					saveAsImage : {
-						show : true
-					}
-				}
-			},
-			calculable : true,
-			xAxis : [ {
-				type : 'category',
-				boundaryGap : false,
-				data : getLabel()
-			} ],
-			yAxis : [ {
-				type : 'value'
-			} ],
-			series : [ {
-				name : '输出电压',
-				type : 'line',
-				stack : '总量',
-				//data : outputVoltage
-				data : outputVoltage
-			}, {
-				name : '电池电压',
-				type : 'line',
-				stack : '总量',
-				//data : batteryVoltage
-				data : batteryVoltage
-			}, {
-				name : '负载',
-				type : 'line',
-				stack : '总量',
-				//data : batteryLoad
-				data : batteryLoad
-			} ]
+
+		refresh_chart();
+
+		window.onresize = vue.chart.myChart.resize;
+
+		function select_change(obj) {
+			vue.selected = $(obj).val();
+			data_chart();
+			data_list({
+				pageNumber : 1,
+				pageSize : vue.page.pager.pageSize
+			});
 		};
-
-		myChart.setOption(option);
-
-		window.onresize = myChart.resize;
 	</script>
 
 

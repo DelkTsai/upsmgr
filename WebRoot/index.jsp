@@ -54,7 +54,9 @@
 			</h2>
 			<label for="inputEmail" class="sr-only">用户名</label> <input type="text" id="username" name="username" class="form-control" placeholder="用户名" required autofocus> <label for="inputPassword" class="sr-only">密码</label> <input type="password" name="password" id="password" class="form-control" placeholder="密码" required>
 			<div class="checkbox">
-				<label> <input type="checkbox" value="remember-me"> 记住我
+				<label> 
+				<!-- <input type="checkbox" value="remember-me"> 记住我 -->
+				
 				</label>
 				<span id="msg" class="pull-right text-danger">${msg}</span>
 			</div>

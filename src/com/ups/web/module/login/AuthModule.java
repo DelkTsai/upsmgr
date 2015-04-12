@@ -105,12 +105,12 @@ public class AuthModule {
 		pager.setPageNumber(1);
 		pager.setPageSize(25);
 		dservice.find();
+		@SuppressWarnings("unchecked")
 		List<Device> list = (List<Device>)dservice.page.getData();
 		if (list.size()>0) {
 			Device device = list.get(0);
 			ddservice.find(pager,device.getDeviceId());
 		}
-		
 		rs.setv("devinfo", dservice.page.getData()).setv("page", ddservice.page).setv("chartData", ddservice.page.getData());
 		return Json.toJson(rs);
 	}
@@ -118,19 +118,9 @@ public class AuthModule {
 	// 首页
 		@At("/home/list")
 		@Ok("json")
-		public Object list() {
-			Pager pager = new Pager();
-			pager.setPageNumber(1);
-			pager.setPageSize(25);
-			dservice.find();
-			List<Device> list = (List<Device>)dservice.page.getData();
-			if (list.size()>0) {
-				Device device = list.get(0);
-				ddservice.find(pager,device.getDeviceId());
-			}
-			
-			rs.setv("devinfo", dservice.page.getData()).setv("page", ddservice.page).setv("chartData", ddservice.page.getData());
-			return Json.toJson(rs);
+		public Object list(@Param("..") Pager pager,String deviceId) {
+			ddservice.find(pager,deviceId);
+			return ddservice.page;
 		}
 
 	// 登录页面

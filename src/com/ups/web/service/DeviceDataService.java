@@ -24,8 +24,8 @@ public class DeviceDataService extends BaseService {
 		List<DeviceData> list = null;
 
 		list = dao.query(DeviceData.class,
-				Cnd.where("deviceId", "=", deviceId), null);
-
+				Cnd.where("deviceId", "=", deviceId).limit(1,25).desc("dataTime"));
+		
 		page.setData(list);
 		isSuccess = true;
 	}

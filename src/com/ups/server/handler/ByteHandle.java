@@ -14,7 +14,7 @@ public class ByteHandle extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			if (ServerCache.data.length() > 22) {
+			if (ServerCache.data.length() >=30) {
 				ServerCache.dataUpdate = false;
 				byte2Object();
 				ServerCache.objUpdate = true;

@@ -45,8 +45,7 @@
 										<label for="nickname">昵称</label> <input type="text" class="form-control" id="nickname" placeholder="昵称" v-model="form.nickname">
 									</div>
 									<div class="form-group">
-										<label for="roleid">角色</label> 
-										<select class="form-control" id="roleid" v-model="form.roleid" options="roleOptions" placeholder="角色" ></select>
+										<label for="roleid">角色</label> <select class="form-control" id="roleid" v-model="form.roleid" options="roleOptions" placeholder="角色"></select>
 									</div>
 									<div class="form-group">
 										<label for="status">状态</label> <input type="text" class="form-control" id="status" placeholder="状态" v-model="form.status">
@@ -67,7 +66,7 @@
 						</div>
 					</div>
 				</div>
-			
+
 			</div>
 
 			<div class="col-sm-1 sidebar">
@@ -83,8 +82,7 @@
 
 			<div class="col-xs-12 col-sm-11 col-sm-offset-1 main">
 				<div class="form-inline page-header">
-					<select class="form-control" v-model="condition.roleid" options="roleOptions" style="width:100px;display: inline-block;"></select>
-					<input type="text" class="form-control" v-model="condition.username" placeholder="用户名" style="width:100px;display: inline-block;" /> 
+					<select class="form-control" v-model="condition.roleid" options="roleOptions" style="width:100px;display: inline-block;"></select> <input type="text" class="form-control" v-model="condition.username" placeholder="用户名" style="width:100px;display: inline-block;" />
 					<button class="btn btn-success">
 						<i class="fa fa-search" v-on="click:search"></i>
 					</button>
@@ -111,18 +109,16 @@
 								<td><a title="编辑" href="javascript:;" v-on="click:data_edit((page.pager.pageNumber-1)*page.pager.pageSize+$index)"><i class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;<a title="删除" v-on="click:data_delete((page.pager.pageNumber-1)*page.pager.pageSize+$index)" href="javascript:;"><i class="fa fa-trash fa-lg text-danger"></i></a> &nbsp;&nbsp;&nbsp;{{(page.pager.pageNumber-1)*page.pager.pageSize+$index+1}}</td>
 								<td>{{username}}</td>
 								<td>{{nickname}}</td>
-								<td>{{roleid}}</td>
+								<td>{{getRole(roleid)}}</td>
 								<td>{{createTime}}</td>
 								<td>{{updateTime}}</td>
-								<td>{{status}}</td>
+								<td>{{status==0?'启用':'禁用'}}</td>
 								<td>{{comment}}</td>
 							</tr>
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="8">
-								<%@include file="share/pager.jsp"%>
-								</td>
+								<td colspan="8"><%@include file="share/pager.jsp"%></td>
 							</tr>
 						</tfoot>
 					</table>
@@ -188,6 +184,8 @@
 			});
 		};
 
+		
+		
 		var vue = new Vue({
 			el : "#user",
 			data : {
@@ -227,27 +225,34 @@
 				page : ${obj}
 			},
 			methods : {
+				getRole:function(roleid) {
+					var text = "未知";
+					$(this.roleOptions).each(function(index,item) {
+						if(item.value==roleid) text = item.text;
+					});
+					return text;
+				},
 				search : function() {
 					data_list({
 						pageNumber : 1,
-						pageSize : vue.page.pager.pageSize
+						pageSize : this.page.pager.pageSize
 					});
 				},
 				data_save : function() {
-					if (!vue.isEdit) {
-						$.post("sys/user/add", vue.form, function(data) {
+					if (!this.isEdit) {
+						$.post("sys/user/add", this.form, function(data) {
 							showSuccess(data.isSuccess, data.msg);
 						}, "json");
 					} else {
-						$.post("sys/user/edit", vue.form, function(data) {
+						$.post("sys/user/edit", this.form, function(data) {
 							showSuccess(data.isSuccess, data.msg);
 						}, "json");
 					}
 				},
 
 				data_delete : function(rowid) {
-					if (confirm("确认删除设备：" + vue.page.data[rowid].username)) {
-						$.post("sys/user/delete", vue.page.data[rowid],
+					if (confirm("确认删除设备：" + this.page.data[rowid].username)) {
+						$.post("sys/user/delete", this.page.data[rowid],
 								function(data) {
 									showSuccess(data.isSuccess, data.msg);
 								}, "json");
@@ -256,45 +261,45 @@
 
 				data_edit : function(rowid) {
 					$('#myModal').modal('show');
-					vue.form = clone(vue.page.data[rowid]);
-					vue.isEdit = true;
+					this.form = clone(this.page.data[rowid]);
+					this.isEdit = true;
 				},
 				data_add : function() {
 					$('#myModal').modal('show');
 					$("#user-editor")[0].reset();
-					vue.isEdit = false;
+					this.isEdit = false;
 				},
 
 				nextPage : function() {
-					if (vue.page.pager.pageNumber == vue.page.pager.pageCount)
+					if (this.page.pager.pageNumber == this.page.pager.pageCount)
 						return;
 					data_list({
-						pageNumber : vue.page.pager.pageNumber + 1,
-						pageSize : vue.page.pager.pageSize
+						pageNumber : this.page.pager.pageNumber + 1,
+						pageSize : this.page.pager.pageSize
 					});
 				},
 				previousPage : function() {
-					if (vue.page.pager.pageNumber == 1)
+					if (this.page.pager.pageNumber == 1)
 						return;
 					data_list({
-						pageNumber : vue.page.pager.pageNumber - 1,
-						pageSize : vue.page.pager.pageSize
+						pageNumber : this.page.pager.pageNumber - 1,
+						pageSize : this.page.pager.pageSize
 					});
 				},
 				firstPage : function() {
-					if (vue.page.pager.pageNumber == 1)
+					if (this.page.pager.pageNumber == 1)
 						return;
 					data_list({
 						pageNumber : 1,
-						pageSize : vue.page.pager.pageSize
+						pageSize : this.page.pager.pageSize
 					});
 				},
 				lastPage : function() {
-					if (vue.page.pager.pageNumber == vue.page.pager.pageCount)
+					if (this.page.pager.pageNumber == this.page.pager.pageCount)
 						return;
 					data_list({
-						pageNumber : vue.page.pager.pageCount,
-						pageSize : vue.page.pager.pageSize
+						pageNumber : this.page.pager.pageCount,
+						pageSize : this.page.pager.pageSize
 					});
 				}
 			}
