@@ -18,9 +18,9 @@ public class ObjectHandle extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			if (ServerCache.objList.size()>5) {
+			if (ServerCache.objList.size()>=5) {
 				dao.insert(ServerCache.objList.subList(0, 5));
-				ServerCache.objList.removeAll(ServerCache.objList.subList(0, 5));
+				ServerCache.objList.subList(0, 5).clear();
 				ServerCache.objUpdate = false;
 			}
 		}

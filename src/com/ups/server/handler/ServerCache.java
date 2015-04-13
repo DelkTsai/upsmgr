@@ -15,6 +15,8 @@ public class ServerCache extends Thread {
 	public void run() {
 		ByteHandle bh = new ByteHandle();
 		ObjectHandle oh = new ObjectHandle();
+		bh.setName("数据包解析及对象化线程");
+		oh.setName("对象持久化线程");
 		bh.start();
 		oh.start();
 	}
