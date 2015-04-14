@@ -11,17 +11,18 @@
 <head>
 <base href="<%=path%>/">
 <title>首页-UPS管理系统</title>
-<%@include file="share/header.jsp"%>
+<%@include file="../share/header.jsp"%>
 </head>
+
 <body>
 
-	<%@include file="share/navbar.jsp"%>
+	<%@include file="../share/navbar.jsp"%>
 
 	<div class="container-fluid">
-		<div class="row" id="sys">
+		<div class="row" id="role">
 			<div class="col-xs-12">
 
-				<%@include file="share/dialog.jsp"%>
+				<%@include file="../share/dialog.jsp"%>
 
 				<!-- Modal -->
 				<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -39,16 +40,17 @@
 								</h4>
 							</div>
 							<div class="modal-body">
-								<form id="dev-editor">
+								<form id="role-editor">
 									<div class="form-group">
-										<label for="deviceId">设备编号</label> <input type="text"
-											disabled="{{show?'disabled':''}}" class="form-control"
-											id="deviceId" placeholder="设备编号" v-model="form.deviceId">
+										<label for="rolename">角色名</label> <input type="text"
+											class="form-control" disabled="{{show?'disabled':''}}"
+											id="rolename" placeholder="角色名" v-model="form.rolename">
 									</div>
+									
 									<div class="form-group">
-										<label for="communicateMethod">通讯方式</label> <select
-											class="form-control" id="communicateMethod"
-											placeholder="通讯方式" v-model="form.communicateMethod" options="methodOptions"></select>
+										<label for="orgid">组织</label> <select class="form-control"
+											id="orgid" v-model="form.orgid" options="orgOptions"
+											placeholder="组织"></select>
 									</div>
 									<div class="form-group">
 										<label for="comment">备注</label> <input type="text"
@@ -70,22 +72,22 @@
 						</div>
 					</div>
 				</div>
+
 			</div>
 
-			<div class="col-xs-12 main">
-				<div class="form-inline page-header">
-					<select class="form-control" v-model="condition.status"
-						options="statusOptions" style="width:100px;display: inline-block;"></select>
-					<input type="text" class="form-control"
-						v-model="condition.deviceId" placeholder="设备编号"
-						style="width:100px;display: inline-block;" />
+			<div class="col-sm-1 sidebar">
+				<ul class="nav nav-sidebar">
+					<li><a href="sys/user">用户管理<span
+							class="sr-only"></span></a></li>
+					<li class="active"><a href="javascript:;">角色管理<span class="sr-only"></span></a></li>
+					<li><a href="sys/menu"> 菜单管理<span class="sr-only"></span></a></li>
+				</ul>
+			</div>
 
-					<button class="btn btn-success" v-on="click:search">
-						<i class="fa fa-search"></i>
-					</button>
-					<button type="button" class="btn btn-success pull-right"
-						v-on="click:data_add">
-						<i class="fa fa-plus"></i>&nbsp;新增
+			<div class="col-xs-12 col-sm-11 col-sm-offset-1 main">
+				<div class="page-header">
+					<button class="btn btn-success" v-on="click:data_add">
+						<i class="fa fa-plus"></i> 新增
 					</button>
 				</div>
 				<div class="table-responsive">
@@ -93,55 +95,59 @@
 						<thead>
 							<tr>
 								<th>#</th>
-								<th>设备编号</th>
-								<th>安装时间</th>
-								<th>通信方式</th>
-								<th>工作状态</th>
+								<th>角色名</th>
+								<th>组织</th>
+								<th>新增权限</th>
+								<th>删除权限</th>
+								<th>更改权限</th>
+								<th>查看权限</th>
 								<th>备注</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-repeat="dev:page.data">
+							<tr v-repeat="role:page.data">
 								<td><a title="编辑" href="javascript:;"
-									v-on="click:data_edit(dev)"><i
+									v-on="click:data_edit(role)"><i
 										class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;<a
-									title="删除" v-on="click:data_delete(dev)" href="javascript:;"><i
+									title="删除"
+									v-on="click:data_delete(role)"
+									href="javascript:;"><i
 										class="fa fa-trash fa-lg text-danger"></i></a>
 									&nbsp;&nbsp;&nbsp;{{(page.pager.pageNumber-1)*page.pager.pageSize+$index+1}}</td>
-								<td>{{dev.deviceId}}</td>
-								<td>{{dev.installTime}}</td>
-								<td>{{getMethod(dev.communicateMethod)}}</td>
-								<td>{{dev.status==0?'正常':'异常'}}</td>
-								<td>{{dev.comment}}</td>
+								<td>{{role.rolename}}</td>
+								<td>{{getRole(role.orgid)}}</td>
+								<td><button class="btn btn-warning btn-xs"><i class="fa fa-plus"></i></button></td>
+								<td><button class="btn btn-warning btn-xs"><i class="fa fa-trash"></i></button></td>
+								<td><button class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button></td>
+								<td><button class="btn btn-warning btn-xs"><i class="fa fa-eye"></i></button></td>
+								<td>{{role.comment}}</td>
 							</tr>
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="7"><%@include file="share/pager.jsp"%></td>
+								<td colspan="8"><%@include file="../share/pager.jsp"%></td>
 							</tr>
 						</tfoot>
 					</table>
 				</div>
 			</div>
-
 		</div>
 	</div>
 
-	<%@include file="share/footer.jsp"%>
+	<%@include file="../share/footer.jsp"%>
 
 	<script type="text/javascript">
 		$("#myModal").modal({
 			backdrop : false,
 			show : false
 		});
-
 		function showSuccess(success, msg) {
 			if (success) {
 				$("#save-success .msg").text(msg);
 				$("#save-success").fadeIn(600);
 				data_list({
 					pageNumber : 1,
-					pageSize : 5,
+					pageSize : 5
 				});
 				setTimeout(function() {
 					$("#save-success").fadeOut(600);
@@ -156,7 +162,7 @@
 		}
 
 		function data_list(pager) {
-			$.getJSON("dev/list", $.extend(pager, vue.condition),
+			$.getJSON("sys/role/list", $.extend(pager, vue.condition),
 					function(data) {
 						vue.page = data;
 					});
@@ -188,38 +194,34 @@
 
 		var vue = new Vue(
 				{
-					el : "#sys",
+					el : "#role",
 					data : {
-						show : false,
-						methodOptions : [ {
-							text : 'WIFI',
-							value : '0'
-						}, {
-							text : 'RS232',
+						isEdit : false,
+						orgOptions : [ {
+							text : '开发部',
 							value : '1'
-						} ],
-						statusOptions : [ {
-							text : '全部',
-							value : '-1'
 						}, {
-							text : '正常',
-							value : '0'
+							text : '测试部',
+							value : '2'
 						}, {
-							text : '异常',
-							value : '1'
+							text : '财务部',
+							value : '3'
+						}, {
+							text : '行政部',
+							value : '4'
 						} ],
 						form : {
-							deviceId : 100000,
-							communicateMethod : 0,
+							rolename : "test",
+							orgid:"1",
 							comment : "测试数据"
 						},
 						condition : {
-							status : "-1",
-							deviceId : ""
+							username : null,
+							roleid : -1
 						},
 						header : {
 							index : "#",
-							deviceId : "设备编号",
+							usericeId : "设备编号",
 							installTime : "安装时间",
 							communicateMethod : "通讯方式",
 							status : "工作状态",
@@ -228,10 +230,11 @@
 						page : ${obj}
 					},
 					methods : {
-						getMethod : function(method) {
+						getRole : function(roleid) {
 							var text = "未知";
-							$(this.methodOptions).each(function(index,item) {
-								if(item.value==method) text=item.text;
+							$(this.orgOptions).each(function(index, item) {
+								if (item.value == roleid)
+									text = item.text;
 							});
 							return text;
 						},
@@ -242,34 +245,42 @@
 							});
 						},
 						data_save : function() {
-							if (!this.show) {
-								$.post("dev/add", this.form, function(data) {
-									showSuccess(data.isSuccess, data.msg);
-								}, "json");
+							if (!this.isEdit) {
+								$.post("sys/role/add", this.form,
+										function(data) {
+											showSuccess(data.isSuccess,
+													data.msg);
+										}, "json");
 							} else {
-								$.post("dev/edit", this.form, function(data) {
+								$.post("sys/role/edit", this.form, function(
+										data) {
 									showSuccess(data.isSuccess, data.msg);
 								}, "json");
+							}
+						},
+
+						data_delete : function(obj) {
+							if (confirm("确认删除角色："
+									+ obj.rolename)) {
+								$.post("sys/role/delete",
+										obj, function(data) {
+											showSuccess(data.isSuccess,
+													data.msg);
+										}, "json");
 							}
 						},
 
 						data_edit : function(obj) {
 							$('#myModal').modal('show');
 							this.form = clone(obj);
-							this.show = true;
+							this.isEdit = true;
 						},
 						data_add : function() {
 							$('#myModal').modal('show');
-							$("#dev-editor")[0].reset();
-							this.show = false;
+							$("#role-editor")[0].reset();
+							this.isEdit = false;
 						},
-						data_delete : function(obj) {
-							if (confirm("确认删除设备：" + obj.deviceId)) {
-								$.post("dev/delete", obj, function(data) {
-									showSuccess(data.isSuccess, data.msg);
-								}, "json");
-							}
-						},
+
 						nextPage : function() {
 							if (this.page.pager.pageNumber == this.page.pager.pageCount)
 								return;
@@ -318,15 +329,17 @@
 					href : "dev",
 					text : "设备管理",
 					icon : "fa fa-laptop",
-					active : true
+					active : false
 				}, {
 					href : "sys/user",
 					text : "系统管理",
 					icon : "fa fa-cog",
-					active : false
+					active : true
 				} ]
 			}
 		});
+		$("input[type=\"checkbox\"], input[type=\"radio\"]").not(
+				"[data-switch-no-init]").bootstrapSwitch("size", "mini");
 	</script>
 </body>
 </html>

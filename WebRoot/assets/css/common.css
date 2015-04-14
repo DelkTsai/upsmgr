@@ -13,3 +13,15 @@
 .navbar-inverse .navbar-nav>.active>a {
 	background: #428BCA;
 }
+
+.tree:BEFORE {
+	display: inline-block;
+	content: "";
+	position: absolute;
+	top: -20px;
+	bottom: 16px;
+	left: 0;
+	z-index: 1;
+	border: 1px dotted #67b2dd;
+	border-width: 0 0 0 1px;
+}

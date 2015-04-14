@@ -1,15 +1,16 @@
 package com.ups.web.service;
 
 import java.util.Date;
-import java.util.List;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;
+import org.nutz.dao.QueryResult;
 import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 
+import com.ups.web.entity.Role;
 import com.ups.web.entity.User;
 import com.ups.web.tool.DESKey;
 
@@ -34,7 +35,7 @@ public class UserService extends BaseService {
 
 	// 数据库分页查询
 	public void find(Pager pager, User user) {
-		List<User> list = null;
+		QueryResult qr = new QueryResult();
 		Condition cnd = null;
 		if (user == null)
 			cnd = Cnd.orderBy().desc("createTime");
@@ -45,10 +46,10 @@ public class UserService extends BaseService {
 							user.getUsername())
 					.and("roleid", user.getRoleid() < 0 ? "<>" : "=",
 							user.getRoleid()).desc("createTime");
-		list = dao.query(User.class, cnd, pager);
 		pager.setRecordCount(dao.count(User.class, cnd));
-		page.setPager(pager);
-		page.setData(list);
+		qr.setList(dao.query(User.class, cnd, pager));
+		qr.setPager(pager);
+		rs.setv("page", qr).setv("roles", dao.query(Role.class, null));
 		isSuccess = true;
 	}
 

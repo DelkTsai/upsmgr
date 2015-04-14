@@ -11,77 +11,77 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
-import com.ups.web.entity.User;
-import com.ups.web.service.UserService;
+import com.ups.web.entity.Role;
+import com.ups.web.service.RoleService;
 
 //用户管理的Controller类
 //该类的方法为Action对应用户的每个操作
 @AdaptBy(type = PairAdaptor.class)
-@At("/sys/user")
+@At("/sys/role")
 @IocBean
-public class UsermgrModule {
+public class RoleModule {
 	
 	//注入Service
-	@Inject("userService")
-	private UserService service;
+	@Inject("roleService")
+	private RoleService service;
 	// 创建请求结果对象（用于返回增、删、改操作结果给用户）
 	private NutMap rs = new NutMap();
 
 	//用户管理页面初始化
 	@At("/")
-	@Ok("jsp:page.sysmgr")//返回视图
+	@Ok("jsp:page.sys.role")//返回视图
 	public Object index() {
 		Pager pager = new Pager();
 		pager.setPageNumber(1);
-		pager.setPageSize(5);
-		service.find(pager,null);
+		pager.setPageSize(10);
+		service.find(pager);
 		return Json.toJson(service.page);
 	}
 
-	//用户分页查询
+	//角色查询
 	@At("/list")
 	@Ok("json")//返回json数据
-	public Object list(@Param("..") Pager pager,@Param("..") User user) {
-		service.find(pager,user);
+	public Object list(@Param("..") Pager pager) {
+		service.find(pager);
 		return service.page;
 	}
 
-	//用户添加
+	//角色添加
 	@At("/add")
 	@Ok("json")//返回json数据
-	public Object add(@Param("..") User user) {
-		service.add(user);
+	public Object add(@Param("..") Role role) {
+		service.add(role);
 		if (service.isSuccess) {
-			rs.setv("isSuccess",true).setv("msg", "添加成功，用户名：" + user.getUsername());
+			rs.setv("isSuccess",true).setv("msg", "添加成功，角色名：" + role.getRolename());
 		} else {
-			rs.setv("isSuccess",false).setv("msg", "添加失败，用户名：" + user.getUsername());
+			rs.setv("isSuccess",false).setv("msg", "添加失败，角色名：" + role.getRolename());
 		}
 		return rs;
 
 	}
 
-	//用户编辑
+	//角色编辑
 	@At("/edit")
 	@Ok("json")//返回json数据
-	public Object edit(@Param("..") User user) {
-		service.edit(user);
+	public Object edit(@Param("..") Role role) {
+		service.edit(role);
 		if (service.isSuccess) {
-			rs.setv("isSuccess",true).setv("msg", "修改成功，用户名：" + user.getUsername());
+			rs.setv("isSuccess",true).setv("msg", "修改成功，角色名：" + role.getRolename());
 		} else {
-			rs.setv("isSuccess",false).setv("msg", "修改失败，用户名：" + user.getUsername());
+			rs.setv("isSuccess",false).setv("msg", "修改失败，角色名：" + role.getRolename());
 		}
 		return rs;
 	}
 
-	//用户删除
+	//角色删除
 	@At("/delete")
 	@Ok("json")//返回json数据
-	public Object delete(@Param("..") User user) {
-		service.delete(user);
+	public Object delete(@Param("..") Role role) {
+		service.delete(role);
 		if (service.isSuccess) {
-			rs.setv("isSuccess",true).setv("msg", "删除成功，用户名：" + user.getUsername());
+			rs.setv("isSuccess",true).setv("msg", "删除成功，角色名：" + role.getRolename());
 		} else {
-			rs.setv("isSuccess",false).setv("msg", "删除失败，用户名：" + user.getUsername());
+			rs.setv("isSuccess",false).setv("msg", "删除失败，角色名：" + role.getRolename());
 		}
 		return rs;
 	}
