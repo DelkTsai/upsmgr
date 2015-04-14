@@ -116,14 +116,14 @@
 						</thead>
 						<tbody v-repeat="menu:page.list">
 							<tr>
-								<td><a title="编辑" href="javascript:;"
-									v-on="click:data_edit(menu)"><i
-										class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;<a
-									title="删除" v-on="click:data_delete(menu)" href="javascript:;"><i
-										class="fa fa-trash fa-lg text-danger"></i></a>&nbsp;&nbsp; <a
-									title="展开" v-on="click:data_delete($index)" href="javascript:;"><i
-										class="fa fa-minus-square fa-lg"></i></a>
-									&nbsp;&nbsp;&nbsp;{{$index+1}}</td>
+								<td>
+									<a title="编辑" href="javascript:;" v-on="click:data_edit(menu)"><i class="fa fa-edit  text-success fa-lg"></i></a> 
+									&nbsp;&nbsp;
+									<a title="删除" v-on="click:data_delete(menu)" href="javascript:;"><i class="fa fa-trash fa-lg text-danger"></i></a>
+									&nbsp;&nbsp; 
+									<a title="展开" v-on="click:toggle(menu)" href="javascript:;"><i class="fa fa-{{menu.status!=0?'minus':'plus'}}"></i></a>
+									&nbsp;&nbsp;&nbsp;{{$index+1}}
+								</td>
 								<td class="text-primary" style="font-weight: bold;">{{menu.pmenu==0?'顶级菜单':''}}</td>
 								<td>{{menu.menuName}}</td>
 								<td>{{menu.menuText}}</td>
@@ -132,7 +132,7 @@
 								<td>{{menu.status}}</td>
 							</tr>
 
-							<tr v-repeat="sub: menu.subMenus">
+							<tr v-repeat="sub: menu.subMenus" v-show="menu.status!=0">
 								<td><a title="编辑" href="javascript:;"
 									v-on="click:data_edit(sub)" style="padding-left: 70px;"><i
 										class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;<a
@@ -237,6 +237,9 @@
 				})()
 			},
 			methods : {
+				toggle:function(item){
+					item.status==1?item.status=0:item.status= 1;
+				},
 				getPmenu : function() {
 					var text = "未知";
 					$(this.orgOptions).each(function(index, item) {

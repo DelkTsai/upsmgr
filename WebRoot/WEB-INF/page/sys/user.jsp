@@ -140,7 +140,7 @@
 										<input type="checkbox">
 									</template>
 								</td>
-								<td>{{comment}}</td>
+								<td>{{user.comment}}</td>
 							</tr>
 						</tbody>
 						<tfoot>
