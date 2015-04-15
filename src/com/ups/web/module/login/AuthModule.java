@@ -21,6 +21,7 @@ import com.ups.web.entity.Device;
 import com.ups.web.entity.User;
 import com.ups.web.service.DeviceDataService;
 import com.ups.web.service.DeviceService;
+import com.ups.web.service.MenuService;
 import com.ups.web.service.UserService;
 import com.ups.web.tool.DESKey;
 
@@ -35,6 +36,8 @@ public class AuthModule {
 	private DeviceService dservice;
 	@Inject("deviceDataService")
 	private DeviceDataService ddservice;
+	@Inject("menuService")
+	private MenuService mservice;
 	
 	private NutMap rs = new NutMap();
 
@@ -56,6 +59,8 @@ public class AuthModule {
 	public Object login(@Param("..") User user, HttpSession session) {
 		if (service.login(user)) {
 			session.setAttribute("curruser", service.page.getData());
+			mservice.find();
+			session.setAttribute("menus", Json.toJson(mservice.rs.get("page")));
 			return "success";
 		}
 		session.setAttribute("msg", service.page.getData());

@@ -18,6 +18,10 @@
 
 	<%@include file="../share/navbar.jsp"%>
 
+	<script type="text/javascript">
+		activeMenu("sys/menu");
+	</script>
+
 	<div class="container-fluid">
 		<div class="row" id="menu">
 			<div class="col-xs-12">
@@ -57,9 +61,11 @@
 											v-model="form.menuText">
 									</div>
 									<div class="form-group">
-										<label for="menuIcon">菜单图标 &nbsp;&nbsp;<i class="{{form.menuIcon}}"></i>&nbsp;&nbsp;<a target="blank" href="http://fontawesome.dashgame.com/#new">图标参考</a></label> <input type="text"
-											class="form-control" id="menuIcon" v-model="form.menuIcon"
-											placeholder="菜单图标">
+										<label for="menuIcon">菜单图标 &nbsp;&nbsp;<i
+											class="{{form.menuIcon}}"></i>&nbsp;&nbsp;<a target="blank"
+											href="http://fontawesome.dashgame.com/#new">图标参考</a></label> <input
+											type="text" class="form-control" id="menuIcon"
+											v-model="form.menuIcon" placeholder="菜单图标">
 									</div>
 									<div class="form-group">
 										<label for="menuLink">URL</label> <input type="text"
@@ -85,17 +91,8 @@
 
 			</div>
 
-			<div class="col-sm-1 sidebar">
-				<ul class="nav nav-sidebar">
-					<li><a href="sys/user">用户管理<span class="sr-only"></span></a></li>
-					<li><a href="sys/role">角色管理<span class="sr-only"></span></a></li>
-					<li class="active"><a href="javascript:;"> 菜单管理<span
-							class="sr-only"></span></a></li>
-				</ul>
-			</div>
 
-
-			<div class="col-xs-12 col-sm-11 col-sm-offset-1 main">
+			<div class="col-xs-12 main">
 				<div class="page-header">
 					<button class="btn btn-success" v-on="click:data_add">
 						<i class="fa fa-plus"></i> 新增
@@ -116,14 +113,17 @@
 						</thead>
 						<tbody v-repeat="menu:page.list">
 							<tr>
-								<td>
-									<a title="编辑" href="javascript:;" v-on="click:data_edit(menu)"><i class="fa fa-edit  text-success fa-lg"></i></a> 
-									&nbsp;&nbsp;
-									<a title="删除" v-on="click:data_delete(menu)" href="javascript:;"><i class="fa fa-trash fa-lg text-danger"></i></a>
-									&nbsp;&nbsp; 
-									<a title="展开" v-on="click:toggle(menu)" href="javascript:;"><i class="fa fa-{{menu.status!=0?'minus':'plus'}}"></i></a>
-									&nbsp;&nbsp;&nbsp;{{$index+1}}
-								</td>
+								<td><a title="编辑" href="javascript:;"
+									v-on="click:data_edit(menu)"><i
+										class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;&nbsp; <a
+									title="删除" v-on="click:data_delete(menu)" href="javascript:;"><i
+										class="fa fa-trash fa-lg text-danger"></i></a> &nbsp;&nbsp; <template
+										v-if="menu.hasChild"> <a title="展开"
+										v-on="click:toggle(menu)" href="javascript:;"><i
+										class="fa fa-{{menu.expand?'minus':'plus'}}"></i></a> </template> <template
+										v-if="!menu.hasChild"> <a title="展开"
+										href="javascript:;"><i class="fa fa-minus"></i></a> </template>
+									&nbsp;&nbsp;&nbsp;{{$index+1}}</td>
 								<td class="text-primary" style="font-weight: bold;">{{menu.pmenu==0?'顶级菜单':''}}</td>
 								<td>{{menu.menuName}}</td>
 								<td>{{menu.menuText}}</td>
@@ -132,9 +132,9 @@
 								<td>{{menu.status}}</td>
 							</tr>
 
-							<tr v-repeat="sub: menu.subMenus" v-show="menu.status!=0">
-								<td><a title="编辑" href="javascript:;"
-									v-on="click:data_edit(sub)" style="padding-left: 70px;"><i
+							<tr v-repeat="sub: menu.subMenus" v-show="menu.expand">
+								<td class="text-center"><a title="编辑" href="javascript:;"
+									v-on="click:data_edit(sub)"><i
 										class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;<a
 									title="删除" v-on="click:data_delete(sub)" href="javascript:;"><i
 										class="fa fa-trash fa-lg text-danger"></i></a>&nbsp;&nbsp;
@@ -237,8 +237,8 @@
 				})()
 			},
 			methods : {
-				toggle:function(item){
-					item.status==1?item.status=0:item.status= 1;
+				toggle : function(item) {
+					item.expand = !item.expand;
 				},
 				getPmenu : function() {
 					var text = "未知";
@@ -268,10 +268,9 @@
 
 				data_delete : function(obj) {
 					if (confirm("确认删除菜单：" + obj.menuText)) {
-						$.post("sys/menu/delete", obj,
-								function(data) {
-									showSuccess(data.isSuccess, data.msg);
-								}, "json");
+						$.post("sys/menu/delete", obj, function(data) {
+							showSuccess(data.isSuccess, data.msg);
+						}, "json");
 					}
 				},
 
@@ -296,17 +295,36 @@
 					href : "home",
 					text : "仪表盘",
 					icon : "fa fa-dashboard",
-					active : false
+					active : false,
+					hasChild : false
 				}, {
 					href : "dev",
 					text : "设备管理",
 					icon : "fa fa-laptop",
-					active : false
+					active : false,
+					hasChild : false
 				}, {
-					href : "sys/user",
+					href : "javascrpit:;",
 					text : "系统管理",
 					icon : "fa fa-cog",
-					active : true
+					active : true,
+					hasChild : true,
+					child : [ {
+						href : "sys/user",
+						text : "用户管理",
+						icon : "fa fa-user",
+						active : false
+					}, {
+						href : "sys/role",
+						text : "角色管理",
+						icon : "fa fa-users",
+						active : false
+					}, {
+						href : "sys/menu",
+						text : "菜单管理",
+						icon : "fa fa-list",
+						active : true
+					} ]
 				} ]
 			}
 		});

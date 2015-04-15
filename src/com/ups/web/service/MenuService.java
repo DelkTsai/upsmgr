@@ -25,6 +25,13 @@ public class MenuService extends BaseService {
 		list = dao.query(Menu.class, Cnd.where("pmenu", "=", "0"));
 		for (Menu menu : list) {
 			menu.setSubMenus(dao.query(Menu.class, Cnd.where("pmenu", "=", menu.getId())));
+			menu.setExpand(false);
+			menu.setActive(false);
+			if (menu.getSubMenus().isEmpty()) {
+				menu.setHasChild(false);
+			}else{
+				menu.setHasChild(true);
+			}
 		}
 		qr.setList(list);
 		isSuccess = true;

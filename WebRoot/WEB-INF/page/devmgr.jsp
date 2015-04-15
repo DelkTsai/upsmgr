@@ -16,7 +16,9 @@
 <body>
 
 	<%@include file="share/navbar.jsp"%>
-
+	<script type="text/javascript">
+		activeMenu("dev");
+	</script>
 	<div class="container-fluid">
 		<div class="row" id="sys">
 			<div class="col-xs-12">
@@ -48,7 +50,8 @@
 									<div class="form-group">
 										<label for="communicateMethod">通讯方式</label> <select
 											class="form-control" id="communicateMethod"
-											placeholder="通讯方式" v-model="form.communicateMethod" options="methodOptions"></select>
+											placeholder="通讯方式" v-model="form.communicateMethod"
+											options="methodOptions"></select>
 									</div>
 									<div class="form-group">
 										<label for="comment">备注</label> <input type="text"
@@ -230,8 +233,9 @@
 					methods : {
 						getMethod : function(method) {
 							var text = "未知";
-							$(this.methodOptions).each(function(index,item) {
-								if(item.value==method) text=item.text;
+							$(this.methodOptions).each(function(index, item) {
+								if (item.value == method)
+									text = item.text;
 							});
 							return text;
 						},
@@ -306,27 +310,6 @@
 
 				});
 
-		var navbar = new Vue({
-			el : "#navbar",
-			data : {
-				nav : [ {
-					href : "home",
-					text : "仪表盘",
-					icon : "fa fa-dashboard",
-					active : false
-				}, {
-					href : "dev",
-					text : "设备管理",
-					icon : "fa fa-laptop",
-					active : true
-				}, {
-					href : "sys/user",
-					text : "系统管理",
-					icon : "fa fa-cog",
-					active : false
-				} ]
-			}
-		});
 	</script>
 </body>
 </html>

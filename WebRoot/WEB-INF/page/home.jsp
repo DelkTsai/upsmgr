@@ -14,7 +14,7 @@
 <title>首页-UPS管理系统</title>
 <%@include file="share/header.jsp"%>
 <style type="text/css">
-#device-info option{
+#device-info option {
 	height: 50px;
 }
 </style>
@@ -24,12 +24,19 @@
 
 	<%@include file="share/navbar.jsp"%>
 
+	<script type="text/javascript">
+		activeMenu("home");
+	</script>
+
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-xs-12 main" id="home">
-				<h1 class="page-header text-primary">
-					仪表盘 <select class="form-control pull-right" id="device-info" v-model="selected" options="options" placeholder="设备" style="display: inline-block;width: 400px;" onchange="select_change(this)"></select>
-				</h1>
+				<h2 class="page-header text-primary">
+					仪表盘&nbsp;&nbsp;<select class="form-control " id="device-info"
+						v-model="selected" options="options" placeholder="设备"
+						style="display: inline-block;width:100%;max-width: 365px;"
+						onchange="select_change(this)"></select>
+				</h2>
 				<div class="row placeholders">
 					<div class="col-xs-12" id="chart" style="height: 300px;"></div>
 				</div>
@@ -75,30 +82,6 @@
 	<%@include file="share/footer.jsp"%>
 
 	<script src="assets/js/echarts-all.js"></script>
-
-	<script type="text/javascript">
-		var navbar = new Vue({
-			el : "#navbar",
-			data : {
-				nav : [ {
-					href : "home",
-					text : "仪表盘",
-					icon : "fa fa-dashboard",
-					active : true
-				}, {
-					href : "dev",
-					text : "设备管理",
-					icon : "fa fa-laptop",
-					active : false
-				}, {
-					href : "sys/user",
-					text : "系统管理",
-					icon : "fa fa-cog",
-					active : false
-				} ]
-			}
-		});
-	</script>
 
 	<script type="text/javascript">
 		function getLabel() {
@@ -173,120 +156,127 @@
 			$(ddata.devinfo).each(
 					function(index, item) {
 						op.push({
-							text : "设备编号：" + item.deviceId + " | " + "通信方式："
-									+( item.communicateMethod==0?"WIFI":"RS232") + " | " + "状态："
-									+ (item.status==0?"正常":"异常"),
+							text : "设备编号："
+									+ item.deviceId
+									+ " | "
+									+ "通信方式："
+									+ (item.communicateMethod == 0 ? "WIFI"
+											: "RS232") + " | " + "状态："
+									+ (item.status == 0 ? "正常" : "异常"),
 							value : item.deviceId
 						});
 					});
 			return op;
 		}
 
-		var vue = new Vue({
-			el : "#home",
-			data : {
-				selected : "100001",
-				options : getOption(),
-				chart : {
-					option : {
-						tooltip : {
-							trigger : 'axis'
+		var vue = new Vue(
+				{
+					el : "#home",
+					data : {
+						selected : "100001",
+						options : getOption(),
+						chart : {
+							option : {
+								tooltip : {
+									trigger : 'axis'
+								},
+								legend : {
+									data : [ '输出电压', '电池电压', '负载' ]
+								},
+								toolbox : {
+									show : false,
+									feature : {
+										mark : {
+											show : true
+										},
+										dataView : {
+											show : true,
+											readOnly : false
+										},
+										magicType : {
+											show : true,
+											type : [ 'line', 'bar', 'stack',
+													'tiled' ]
+										},
+										restore : {
+											show : true
+										},
+										saveAsImage : {
+											show : true
+										}
+									}
+								},
+								calculable : true,
+								xAxis : [ {
+									type : 'category',
+									boundaryGap : false,
+									data : getLabel()
+								} ],
+								yAxis : [ {
+									type : 'value'
+								} ],
+								series : [ {
+									name : '输出电压',
+									type : 'line',
+									stack : '总量',
+									//data : outputVoltage
+									data : []
+								}, {
+									name : '电池电压',
+									type : 'line',
+									stack : '总量',
+									//data : batteryVoltage
+									data : []
+								}, {
+									name : '负载',
+									type : 'line',
+									stack : '总量',
+									//data : batteryLoad
+									data : []
+								} ]
+							},
+							myChart : echarts.init(document
+									.getElementById("chart")),
+							chartData : getChartData(ddata.chartData)
 						},
-						legend : {
-							data : [ '输出电压', '电池电压', '负载' ]
-						},
-						toolbox : {
-							show : false,
-							feature : {
-								mark : {
-									show : true
-								},
-								dataView : {
-									show : true,
-									readOnly : false
-								},
-								magicType : {
-									show : true,
-									type : [ 'line', 'bar', 'stack', 'tiled' ]
-								},
-								restore : {
-									show : true
-								},
-								saveAsImage : {
-									show : true
-								}
-							}
-						},
-						calculable : true,
-						xAxis : [ {
-							type : 'category',
-							boundaryGap : false,
-							data : getLabel()
-						} ],
-						yAxis : [ {
-							type : 'value'
-						} ],
-						series : [ {
-							name : '输出电压',
-							type : 'line',
-							stack : '总量',
-							//data : outputVoltage
-							data : []
-						}, {
-							name : '电池电压',
-							type : 'line',
-							stack : '总量',
-							//data : batteryVoltage
-							data : []
-						}, {
-							name : '负载',
-							type : 'line',
-							stack : '总量',
-							//data : batteryLoad
-							data : []
-						} ]
+						page : ddata.page,
+						data : ddata.data
 					},
-					myChart : echarts.init(document.getElementById("chart")),
-					chartData : getChartData(ddata.chartData)
-				},
-				page : ddata.page,
-				data : ddata.data
-			},
-			methods : {
-				nextPage : function() {
-					if (this.page.pager.pageNumber == this.page.pager.pageCount)
-						return;
-					data_list({
-						pageNumber : this.page.pager.pageNumber + 1,
-						pageSize : this.page.pager.pageSize
-					});
-				},
-				previousPage : function() {
-					if (this.page.pager.pageNumber == 1)
-						return;
-					data_list({
-						pageNumber : this.page.pager.pageNumber - 1,
-						pageSize : this.page.pager.pageSize
-					});
-				},
-				firstPage : function() {
-					if (this.page.pager.pageNumber == 1)
-						return;
-					data_list({
-						pageNumber : 1,
-						pageSize : this.page.pager.pageSize
-					});
-				},
-				lastPage : function() {
-					if (this.page.pager.pageNumber == this.page.pager.pageCount)
-						return;
-					data_list({
-						pageNumber : this.page.pager.pageCount,
-						pageSize : this.page.pager.pageSize
-					});
-				}
-			}
-		});
+					methods : {
+						nextPage : function() {
+							if (this.page.pager.pageNumber == this.page.pager.pageCount)
+								return;
+							data_list({
+								pageNumber : this.page.pager.pageNumber + 1,
+								pageSize : this.page.pager.pageSize
+							});
+						},
+						previousPage : function() {
+							if (this.page.pager.pageNumber == 1)
+								return;
+							data_list({
+								pageNumber : this.page.pager.pageNumber - 1,
+								pageSize : this.page.pager.pageSize
+							});
+						},
+						firstPage : function() {
+							if (this.page.pager.pageNumber == 1)
+								return;
+							data_list({
+								pageNumber : 1,
+								pageSize : this.page.pager.pageSize
+							});
+						},
+						lastPage : function() {
+							if (this.page.pager.pageNumber == this.page.pager.pageCount)
+								return;
+							data_list({
+								pageNumber : this.page.pager.pageCount,
+								pageSize : this.page.pager.pageSize
+							});
+						}
+					}
+				});
 	</script>
 
 	<script type="text/javascript">

@@ -6,7 +6,7 @@
 
 <script src="assets/js/bootstrap.js"></script>
 <script src="assets/js/bootstrap-switch.js"></script>
-<script src="assets/js/vue.js"></script>
+
 <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
 <script src="assets/js/holder.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->

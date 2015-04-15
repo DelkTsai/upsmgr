@@ -18,6 +18,10 @@
 
 	<%@include file="../share/navbar.jsp"%>
 
+	<script type="text/javascript">
+		activeMenu("sys/user");
+	</script>
+	
 	<div class="container-fluid">
 		<div class="row" id="user">
 			<div class="col-xs-12">
@@ -80,16 +84,7 @@
 
 			</div>
 
-			<div class="col-sm-1 sidebar">
-				<ul class="nav nav-sidebar">
-					<li class="active"><a href="javascript:;">用户管理<span
-							class="sr-only"></span></a></li>
-					<li><a href="sys/role">角色管理<span class="sr-only"></span></a></li>
-					<li><a href="sys/menu"> 菜单管理<span class="sr-only"></span></a></li>
-				</ul>
-			</div>
-
-			<div class="col-xs-12 col-sm-11 col-sm-offset-1 main">
+			<div class="col-xs-12 main">
 				<div class="form-inline page-header">
 					<select class="form-control" v-model="condition.roleid"
 						options="roleOptions" style="width:100px;display: inline-block;"></select>
@@ -341,27 +336,6 @@
 
 				});
 
-		var navbar = new Vue({
-			el : "#navbar",
-			data : {
-				nav : [ {
-					href : "home",
-					text : "仪表盘",
-					icon : "fa fa-dashboard",
-					active : false
-				}, {
-					href : "dev",
-					text : "设备管理",
-					icon : "fa fa-laptop",
-					active : false
-				}, {
-					href : "sys/user",
-					text : "系统管理",
-					icon : "fa fa-cog",
-					active : true
-				} ]
-			}
-		});
 		$("input[type=\"checkbox\"], input[type=\"radio\"]").not(
 				"[data-switch-no-init]").bootstrapSwitch("size", "mini");
 	</script>

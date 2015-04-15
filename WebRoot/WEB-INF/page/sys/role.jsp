@@ -17,7 +17,11 @@
 <body>
 
 	<%@include file="../share/navbar.jsp"%>
-
+	
+	<script type="text/javascript">
+		activeMenu("sys/role");
+	</script>
+	
 	<div class="container-fluid">
 		<div class="row" id="role">
 			<div class="col-xs-12">
@@ -46,7 +50,7 @@
 											class="form-control" disabled="{{show?'disabled':''}}"
 											id="rolename" placeholder="角色名" v-model="form.rolename">
 									</div>
-									
+
 									<div class="form-group">
 										<label for="orgid">组织</label> <select class="form-control"
 											id="orgid" v-model="form.orgid" options="orgOptions"
@@ -75,16 +79,9 @@
 
 			</div>
 
-			<div class="col-sm-1 sidebar">
-				<ul class="nav nav-sidebar">
-					<li><a href="sys/user">用户管理<span
-							class="sr-only"></span></a></li>
-					<li class="active"><a href="javascript:;">角色管理<span class="sr-only"></span></a></li>
-					<li><a href="sys/menu"> 菜单管理<span class="sr-only"></span></a></li>
-				</ul>
-			</div>
 
-			<div class="col-xs-12 col-sm-11 col-sm-offset-1 main">
+
+			<div class="col-xs-12 main">
 				<div class="page-header">
 					<button class="btn btn-success" v-on="click:data_add">
 						<i class="fa fa-plus"></i> 新增
@@ -109,17 +106,23 @@
 								<td><a title="编辑" href="javascript:;"
 									v-on="click:data_edit(role)"><i
 										class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;<a
-									title="删除"
-									v-on="click:data_delete(role)"
-									href="javascript:;"><i
+									title="删除" v-on="click:data_delete(role)" href="javascript:;"><i
 										class="fa fa-trash fa-lg text-danger"></i></a>
 									&nbsp;&nbsp;&nbsp;{{(page.pager.pageNumber-1)*page.pager.pageSize+$index+1}}</td>
 								<td>{{role.rolename}}</td>
 								<td>{{getRole(role.orgid)}}</td>
-								<td><button class="btn btn-warning btn-xs"><i class="fa fa-plus"></i></button></td>
-								<td><button class="btn btn-warning btn-xs"><i class="fa fa-trash"></i></button></td>
-								<td><button class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button></td>
-								<td><button class="btn btn-warning btn-xs"><i class="fa fa-eye"></i></button></td>
+								<td><button class="btn btn-warning btn-xs">
+										<i class="fa fa-plus"></i>
+									</button></td>
+								<td><button class="btn btn-warning btn-xs">
+										<i class="fa fa-trash"></i>
+									</button></td>
+								<td><button class="btn btn-warning btn-xs">
+										<i class="fa fa-edit"></i>
+									</button></td>
+								<td><button class="btn btn-warning btn-xs">
+										<i class="fa fa-eye"></i>
+									</button></td>
 								<td>{{role.comment}}</td>
 							</tr>
 						</tbody>
@@ -212,7 +215,7 @@
 						} ],
 						form : {
 							rolename : "test",
-							orgid:"1",
+							orgid : "1",
 							comment : "测试数据"
 						},
 						condition : {
@@ -260,13 +263,10 @@
 						},
 
 						data_delete : function(obj) {
-							if (confirm("确认删除角色："
-									+ obj.rolename)) {
-								$.post("sys/role/delete",
-										obj, function(data) {
-											showSuccess(data.isSuccess,
-													data.msg);
-										}, "json");
+							if (confirm("确认删除角色：" + obj.rolename)) {
+								$.post("sys/role/delete", obj, function(data) {
+									showSuccess(data.isSuccess, data.msg);
+								}, "json");
 							}
 						},
 
@@ -317,27 +317,6 @@
 
 				});
 
-		var navbar = new Vue({
-			el : "#navbar",
-			data : {
-				nav : [ {
-					href : "home",
-					text : "仪表盘",
-					icon : "fa fa-dashboard",
-					active : false
-				}, {
-					href : "dev",
-					text : "设备管理",
-					icon : "fa fa-laptop",
-					active : false
-				}, {
-					href : "sys/user",
-					text : "系统管理",
-					icon : "fa fa-cog",
-					active : true
-				} ]
-			}
-		});
 		$("input[type=\"checkbox\"], input[type=\"radio\"]").not(
 				"[data-switch-no-init]").bootstrapSwitch("size", "mini");
 	</script>

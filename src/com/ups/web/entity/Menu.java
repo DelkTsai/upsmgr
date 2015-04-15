@@ -30,6 +30,28 @@ public class Menu {
 	@Many(target = Menu.class, field = "pmenu")
 	private List<Menu>  subMenus;
 	
+	private boolean active;
+	private boolean expand;
+	private boolean hasChild;
+	
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	public boolean isExpand() {
+		return expand;
+	}
+	public void setExpand(boolean expand) {
+		this.expand = expand;
+	}
+	public boolean isHasChild() {
+		return hasChild;
+	}
+	public void setHasChild(boolean hasChild) {
+		this.hasChild = hasChild;
+	}
 	public int getId() {
 		return id;
 	}
