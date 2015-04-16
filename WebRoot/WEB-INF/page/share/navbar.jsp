@@ -41,7 +41,7 @@
 								data-target="#password-change"> <span><i
 										class="fa fa-key"></i>&nbsp;&nbsp;修改密码</span>
 							</a></li>
-							<li class="divider"></li>
+							<!--  <li class="divider"></li>  -->
 						</ul></li>
 					<li><a href="exit">退出&nbsp;<i class="fa fa-sign-out"></i></a></li>
 				</ul>
@@ -116,7 +116,7 @@
 	var navbar = new Vue({
 		el : "#navbar",
 		data : {
-			menus : menu.list
+			menus : menu
 		},
 		filters : {
 			menuFilter : function(menus) {

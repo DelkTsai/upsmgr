@@ -50,7 +50,7 @@ public class MenuModule {
 	// 返回json数据
 	public Object add(@Param("..") Menu menu) {
 		service.add(menu);
-		if (service.isSuccess) {
+		if (service.rs.getBoolean("ok")) {
 			rs.setv("isSuccess", true).setv("msg",
 					"添加成功，用户名：" + menu.getMenuText());
 		} else {
@@ -67,7 +67,7 @@ public class MenuModule {
 	// 返回json数据
 	public Object edit(@Param("..") Menu menu) {
 		service.edit(menu);
-		if (service.isSuccess) {
+		if (service.rs.getBoolean("ok")) {
 			rs.setv("isSuccess", true).setv("msg",
 					"修改成功，用户名：" + menu.getMenuText());
 		} else {
@@ -83,7 +83,7 @@ public class MenuModule {
 	// 返回json数据
 	public Object delete(@Param("..") Menu menu) {
 		service.delete(menu);
-		if (service.isSuccess) {
+		if (service.rs.getBoolean("ok")) {
 			rs.setv("isSuccess", true).setv("msg",
 					"删除成功，用户名：" + menu.getMenuText());
 		} else {

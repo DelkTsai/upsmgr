@@ -3,7 +3,6 @@ package com.ups.web.module.dev;
 import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.lang.util.NutMap;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
@@ -20,7 +19,6 @@ public class DevdataModule {
 	@Inject("deviceDataService")
 	private DeviceDataService service;
 	// 创建请求结果对象（用于返回增、删、改操作结果给用户）
-	private NutMap rs = new NutMap();
 
 //	// 设备管理初始化
 //	@At("/")
@@ -38,7 +36,7 @@ public class DevdataModule {
 	@Ok("json")//返回json数据
 	public Object list(@Param("..") Pager pager,String deviceId) {
 		service.find(pager, deviceId);
-		return service.page;
+		return service.rs;
 	}
 
 	// 设备分页查询
@@ -46,7 +44,7 @@ public class DevdataModule {
 		@Ok("json")//返回json数据
 		public Object chart(String deviceId) {
 			service.find(deviceId);
-			return service.page.getData();
+			return service.rs;
 		}
 
 }

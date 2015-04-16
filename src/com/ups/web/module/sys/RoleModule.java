@@ -35,7 +35,7 @@ public class RoleModule {
 		pager.setPageNumber(1);
 		pager.setPageSize(10);
 		service.find(pager);
-		return Json.toJson(service.page);
+		return Json.toJson(service.rs);
 	}
 
 	//角色查询
@@ -43,7 +43,7 @@ public class RoleModule {
 	@Ok("json")//返回json数据
 	public Object list(@Param("..") Pager pager) {
 		service.find(pager);
-		return service.page;
+		return service.rs;
 	}
 
 	//角色添加
@@ -51,7 +51,7 @@ public class RoleModule {
 	@Ok("json")//返回json数据
 	public Object add(@Param("..") Role role) {
 		service.add(role);
-		if (service.isSuccess) {
+		if (service.rs.getBoolean("ok")) {
 			rs.setv("isSuccess",true).setv("msg", "添加成功，角色名：" + role.getRolename());
 		} else {
 			rs.setv("isSuccess",false).setv("msg", "添加失败，角色名：" + role.getRolename());
@@ -65,7 +65,7 @@ public class RoleModule {
 	@Ok("json")//返回json数据
 	public Object edit(@Param("..") Role role) {
 		service.edit(role);
-		if (service.isSuccess) {
+		if (service.rs.getBoolean("ok")) {
 			rs.setv("isSuccess",true).setv("msg", "修改成功，角色名：" + role.getRolename());
 		} else {
 			rs.setv("isSuccess",false).setv("msg", "修改失败，角色名：" + role.getRolename());
@@ -78,7 +78,7 @@ public class RoleModule {
 	@Ok("json")//返回json数据
 	public Object delete(@Param("..") Role role) {
 		service.delete(role);
-		if (service.isSuccess) {
+		if (service.rs.getBoolean("ok")) {
 			rs.setv("isSuccess",true).setv("msg", "删除成功，角色名：" + role.getRolename());
 		} else {
 			rs.setv("isSuccess",false).setv("msg", "删除失败，角色名：" + role.getRolename());

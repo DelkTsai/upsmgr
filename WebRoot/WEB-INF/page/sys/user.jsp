@@ -179,7 +179,7 @@
 		function data_list(pager) {
 			$.getJSON("sys/user/list", $.extend(pager, vue.condition),
 					function(data) {
-						vue.page = data["page"];
+						vue.page = data;
 					});
 		};
 
@@ -241,7 +241,7 @@
 							status : "工作状态",
 							comment : "备注"
 						},
-						page : data["page"]
+						page : data
 					},
 					methods : {
 						getOption: function(roles){

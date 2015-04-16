@@ -32,7 +32,7 @@ public class DevmgrModule {
 		pager.setPageNumber(1);
 		pager.setPageSize(5);
 		service.find(pager, null);
-		return Json.toJson(service.page);
+		return Json.toJson(service.rs);
 	}
 
 	// 设备分页查询
@@ -40,7 +40,7 @@ public class DevmgrModule {
 	@Ok("json")//返回json数据
 	public Object list(@Param("..") Pager pager, @Param("..") Device device) {
 		service.find(pager, device);
-		return service.page;
+		return service.rs;
 	}
 
 	// 设备添加
@@ -48,7 +48,7 @@ public class DevmgrModule {
 	@Ok("json")//返回json数据
 	public Object add(@Param("..") Device device) {
 		service.add(device);
-		if (service.isSuccess) {
+		if (service.rs.getBoolean("ok")) {
 			rs.setv("isSuccess", true).setv("msg",
 					"添加成功，设备编号：" + device.getDeviceId());
 		} else {
@@ -63,7 +63,7 @@ public class DevmgrModule {
 	@Ok("json")//返回json数据
 	public Object edit(@Param("..") Device device) {
 		service.edit(device);
-		if (service.isSuccess) {
+		if (service.rs.getBoolean("ok")) {
 			rs.setv("isSuccess", true).setv("msg",
 					"修改成功，设备编号：" + device.getDeviceId());
 		} else {
@@ -78,7 +78,7 @@ public class DevmgrModule {
 	@Ok("json")//返回json数据
 	public Object delete(@Param("..") Device device) {
 		service.delete(device);
-		if (service.isSuccess) {
+		if (service.rs.getBoolean("ok")) {
 			rs.setv("isSuccess", true).setv("msg",
 					"删除成功，设备编号：" + device.getDeviceId());
 		} else {

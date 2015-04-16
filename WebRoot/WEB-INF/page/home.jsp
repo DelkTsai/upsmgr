@@ -57,8 +57,8 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-repeat="page.data">
-								<td>{{$index+1}}</td>
+							<tr v-repeat="page.list">
+								<td>{{(page.pager.pageNumber-1)*page.pager.pageSize+$index+1}}</td>
 								<td>{{deviceId}}</td>
 								<td>{{outputVoltage}}</td>
 								<td>{{batteryVoltage}}</td>
@@ -96,7 +96,7 @@
 			$.getJSON("devdata/chart", {
 				deviceId : vue.selected
 			}, function(data) {
-				vue.chart.chartData = getChartData(data);
+				vue.chart.chartData = getChartData(data.list);
 				refresh_chart();
 			});
 		};
@@ -237,10 +237,9 @@
 							},
 							myChart : echarts.init(document
 									.getElementById("chart")),
-							chartData : getChartData(ddata.chartData)
+							chartData : getChartData(ddata.list)
 						},
-						page : ddata.page,
-						data : ddata.data
+						page : ddata
 					},
 					methods : {
 						nextPage : function() {

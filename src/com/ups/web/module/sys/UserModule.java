@@ -51,7 +51,7 @@ public class UserModule {
 	@Ok("json")//返回json数据
 	public Object add(@Param("..") User user) {
 		service.add(user);
-		if (service.isSuccess) {
+		if (service.rs.getBoolean("ok")) {
 			rs.setv("isSuccess",true).setv("msg", "添加成功，用户名：" + user.getUsername());
 		} else {
 			rs.setv("isSuccess",false).setv("msg", "添加失败，用户名：" + user.getUsername());
@@ -65,7 +65,7 @@ public class UserModule {
 	@Ok("json")//返回json数据
 	public Object edit(@Param("..") User user) {
 		service.edit(user);
-		if (service.isSuccess) {
+		if (service.rs.getBoolean("ok")) {
 			rs.setv("isSuccess",true).setv("msg", "修改成功，用户名：" + user.getUsername());
 		} else {
 			rs.setv("isSuccess",false).setv("msg", "修改失败，用户名：" + user.getUsername());
@@ -78,7 +78,7 @@ public class UserModule {
 	@Ok("json")//返回json数据
 	public Object delete(@Param("..") User user) {
 		service.delete(user);
-		if (service.isSuccess) {
+		if (service.rs.getBoolean("ok")) {
 			rs.setv("isSuccess",true).setv("msg", "删除成功，用户名：" + user.getUsername());
 		} else {
 			rs.setv("isSuccess",false).setv("msg", "删除失败，用户名：" + user.getUsername());

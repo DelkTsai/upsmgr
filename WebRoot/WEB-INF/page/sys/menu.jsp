@@ -188,11 +188,12 @@
 		function data_list(pager) {
 			$.getJSON("sys/menu/list", $.extend(pager, vue.condition),
 					function(data) {
-						vue.page = data["page"];
+						vue.page = data;
 					});
 		};
 
 		var data = ${obj};
+		
 		var vue = new Vue({
 			el : "#menu",
 			data : {
@@ -218,14 +219,14 @@
 					menuLink : "链接",
 					status : "状态"
 				},
-				page : data["page"],
+				page : data,
 				pmenuOptions : (function() {
 					var opt = [];
 					opt.push({
 						text : "顶级菜单",
 						value : 0
 					});
-					$(data["page"]["list"]).each(function(index, item) {
+					$(data["list"]).each(function(index, item) {
 						if (item["pmenu"] == 0) {
 							opt.push({
 								text : item["menuText"],
@@ -288,46 +289,7 @@
 
 		});
 
-		var navbar = new Vue({
-			el : "#navbar",
-			data : {
-				nav : [ {
-					href : "home",
-					text : "仪表盘",
-					icon : "fa fa-dashboard",
-					active : false,
-					hasChild : false
-				}, {
-					href : "dev",
-					text : "设备管理",
-					icon : "fa fa-laptop",
-					active : false,
-					hasChild : false
-				}, {
-					href : "javascrpit:;",
-					text : "系统管理",
-					icon : "fa fa-cog",
-					active : true,
-					hasChild : true,
-					child : [ {
-						href : "sys/user",
-						text : "用户管理",
-						icon : "fa fa-user",
-						active : false
-					}, {
-						href : "sys/role",
-						text : "角色管理",
-						icon : "fa fa-users",
-						active : false
-					}, {
-						href : "sys/menu",
-						text : "菜单管理",
-						icon : "fa fa-list",
-						active : true
-					} ]
-				} ]
-			}
-		});
+	
 		$("input[type=\"checkbox\"], input[type=\"radio\"]").not(
 				"[data-switch-no-init]").bootstrapSwitch("size", "mini");
 	</script>

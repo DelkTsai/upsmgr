@@ -104,7 +104,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-repeat="dev:page.data">
+							<tr v-repeat="dev:page.list">
 								<td><a title="编辑" href="javascript:;"
 									v-on="click:data_edit(dev)"><i
 										class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;<a
@@ -188,7 +188,9 @@
 				pageSize : vue.page.pager.pageSize
 			});
 		};
-
+		
+		var data = ${obj};
+		
 		var vue = new Vue(
 				{
 					el : "#sys",
@@ -228,7 +230,7 @@
 							status : "工作状态",
 							comment : "备注"
 						},
-						page : ${obj}
+						page : data
 					},
 					methods : {
 						getMethod : function(method) {
