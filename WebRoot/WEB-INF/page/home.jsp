@@ -70,7 +70,7 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="7"><%@include file="share/pager.jsp"%></td>
+								<td colspan="8"><%@include file="share/pager.jsp"%></td>
 							</tr>
 						</tfoot>
 					</table>
@@ -132,7 +132,6 @@
 				pageSize : vue.page.pager.pageSize
 			});
 		};
-		var ddata = ${obj};
 
 		function getChartData(chartData) {
 			var outputVoltage = [];
@@ -153,7 +152,7 @@
 
 		function getOption() {
 			var op = [];
-			$(ddata.devinfo).each(
+			$(data.devinfo).each(
 					function(index, item) {
 						op.push({
 							text : "设备编号："
@@ -237,9 +236,9 @@
 							},
 							myChart : echarts.init(document
 									.getElementById("chart")),
-							chartData : getChartData(ddata.list)
+							chartData : getChartData(data.list)
 						},
-						page : ddata
+						page : data
 					},
 					methods : {
 						nextPage : function() {

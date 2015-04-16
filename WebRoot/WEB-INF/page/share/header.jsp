@@ -89,4 +89,6 @@
 		}
 		return o;
 	};
+	
+	var data = ${obj};
 </script>

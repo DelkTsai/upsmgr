@@ -260,7 +260,7 @@
 							status : "工作状态",
 							comment : "备注"
 						},
-						page : ${obj}
+						page : data
 					},
 					methods : {
 						getRole : function(roleid) {

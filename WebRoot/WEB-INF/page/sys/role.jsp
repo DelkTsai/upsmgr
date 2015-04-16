@@ -194,7 +194,7 @@
 				pageSize : vue.page.pager.pageSize
 			});
 		};
-		var data = ${obj};
+		
 		var vue = new Vue(
 				{
 					el : "#role",

@@ -207,8 +207,6 @@
 			});
 		};
 		
-		var data = ${obj};
-		
 		var vue = new Vue(
 				{
 					el : "#user",
