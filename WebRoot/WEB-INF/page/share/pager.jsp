@@ -7,7 +7,7 @@
 		{{page.pager.pageNumber}}/{{page.pager.pageCount}}</span></li>
 		<li class="{{page.pager.pageNumber==page.pager.pageCount?'disabled':''}}"><a href="javascript:;" v-on="click:nextPage"><i class="fa fa-angle-right"></i> </a></li>
 		<li class="{{page.pager.pageNumber==page.pager.pageCount?'disabled':''}}"><a href="javascript:;" v-on="click:lastPage"><i class="fa fa-angle-double-right"></i> </a></li>
-		<li><span style="padding: 0 5px;height: 34px;line-height: 32px;">  
+		<li><span style="padding: 0 5px 0 0;height: 34px;line-height: 32px;">  
 		<select class="text-center"  style="width:40px;height:32px;border-radius:0;display: inline-block;border: none;" onchange="size_change(this)">
 					<option value="5" selected="{{page.pager.pageSize==5?'selected':''}}">5</option>
 					<option value="10" selected="{{page.pager.pageSize==10?'selected':''}}">10</option>
