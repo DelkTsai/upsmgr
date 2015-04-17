@@ -21,7 +21,7 @@
 	<script type="text/javascript">
 		activeMenu("sys/user");
 	</script>
-	
+
 	<div class="container-fluid">
 		<div class="row" id="user">
 			<div class="col-xs-12">
@@ -39,15 +39,15 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 								<h4 class="modal-title" id="myModalLabel">
-									<span v-show="!show"><i class="fa fa-plus"></i>&nbsp;新增</span><span
-										v-show="show"><i class="fa fa-edit"></i>&nbsp;编辑</span>
+									<span v-show="!isEdit"><i class="fa fa-plus"></i>&nbsp;新增</span><span
+										v-show="isEdit"><i class="fa fa-edit"></i>&nbsp;编辑</span>
 								</h4>
 							</div>
 							<div class="modal-body">
 								<form id="user-editor">
 									<div class="form-group">
 										<label for="username">用户名</label> <input type="text"
-											class="form-control" disabled="{{show?'disabled':''}}"
+											class="form-control" disabled="{{isEdit?'disabled':''}}"
 											id="username" placeholder="用户名" v-model="form.username">
 									</div>
 									<div class="form-group">
@@ -60,7 +60,7 @@
 											id="roleid" v-model="form.roleid" options="roleOptions"
 											placeholder="角色"></select>
 									</div>
-									
+
 									<div class="form-group">
 										<label for="comment">备注</label> <input type="text"
 											class="form-control" id="comment" placeholder="备注"
@@ -87,10 +87,10 @@
 			<div class="col-xs-12 main">
 				<div class="form-inline page-header">
 					<select class="form-control" v-model="condition.roleid"
-						options="roleOptions" style="width:100px;display: inline-block;"></select>
+						options="roleOptions" style="width: 100px; display: inline-block;"></select>
 					<input type="text" class="form-control"
 						v-model="condition.username" placeholder="用户名"
-						style="width:100px;display: inline-block;" />
+						style="width: 100px; display: inline-block;" />
 					<button class="btn btn-success">
 						<i class="fa fa-search" v-on="click:search"></i>
 					</button>
@@ -117,9 +117,7 @@
 								<td><a title="编辑" href="javascript:;"
 									v-on="click:data_edit(user)"><i
 										class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;<a
-									title="删除"
-									v-on="click:data_delete(user)"
-									href="javascript:;"><i
+									title="删除" v-on="click:data_delete(user)" href="javascript:;"><i
 										class="fa fa-trash fa-lg text-danger"></i></a>
 									&nbsp;&nbsp;&nbsp;{{(page.pager.pageNumber-1)*page.pager.pageSize+$index+1}}</td>
 								<td>{{user.username}}</td>
@@ -127,13 +125,11 @@
 								<td>{{getRole(user.roleid)}}</td>
 								<td>{{user.createTime}}</td>
 								<td>{{user.updateTime}}</td>
-								<td>
-									<template v-if="status==0">
-										<input type="checkbox" checked>
-									</template>
-									<template v-if="status!=0">
-										<input type="checkbox">
-									</template>
+								<td><label
+									class="label label-{{user.status==0?'success':'danger'}}">{{user.status==0?'已启用':'已禁用'}}</label>
+									<button
+										class="btn btn-{{user.status!=0?'success':'danger'}} btn-xs"
+										v-on="click:switch_status(user)">{{user.status!=0?'启用':'禁用'}}</button>
 								</td>
 								<td>{{user.comment}}</td>
 							</tr>
@@ -206,17 +202,23 @@
 				pageSize : vue.page.pager.pageSize
 			});
 		};
-		
+
 		var vue = new Vue(
 				{
 					el : "#user",
 					data : {
 						isEdit : false,
-						roleOptions :(function(){
+						roleOptions : (function() {
 							var opt = [];
-							opt.push({text:"全部",value:-1});
-							$(data["roles"]).each(function(index,item){
-								opt.push({text:item["rolename"],value:item["id"]});
+							opt.push({
+								text : "全部",
+								value : -1
+							});
+							$(data["roles"]).each(function(index, item) {
+								opt.push({
+									text : item["rolename"],
+									value : item["id"]
+								});
 							});
 							return opt;
 						})(),
@@ -242,10 +244,28 @@
 						page : data
 					},
 					methods : {
-						getOption: function(roles){
+						switch_status : function(user) {
+							user.status == 0 ? user.status = 1
+									: user.status = 0;
+							this.form = clone(user);
+							$.post("sys/user/edit", this.form,
+									function(data) {
+									if (data.ok) {
+										showSuccess(data.ok, data.msg);
+									}else{
+										user.status == 0 ? user.status = 1
+												: user.status = 0;
+									}
+									}, "json");
+							
+						},
+						getOption : function(roles) {
 							var opt = [];
-							$(roles).each(function(index,item){
-								opt.push({text:item["rolename"],value:item["id"]});
+							$(roles).each(function(index, item) {
+								opt.push({
+									text : item["rolename"],
+									value : item["id"]
+								});
 							});
 							return opt;
 						},
@@ -264,26 +284,18 @@
 							});
 						},
 						data_save : function() {
-							if (!this.isEdit) {
-								$.post("sys/user/add", this.form,
-										function(data) {
-											showSuccess(data.isSuccess,
-													data.msg);
-										}, "json");
-							} else {
-								$.post("sys/user/edit", this.form, function(
-										data) {
-									showSuccess(data.isSuccess, data.msg);
-								}, "json");
-							}
+							$.post(
+									this.isEdit?"sys/user/edit"
+											: "sys/user/add", this.form,
+									function(data) {
+										showSuccess(data.ok, data.msg);
+									}, "json");
 						},
 						data_delete : function(obj) {
-							if (confirm("确认删除用户："
-									+obj.username)) {
-								$.post("sys/user/delete",obj, function(data) {
-											showSuccess(data.isSuccess,
-													data.msg);
-										}, "json");
+							if (confirm("确认删除用户：" + obj.username)) {
+								$.post("sys/user/delete", obj, function(data) {
+									showSuccess(data.isSuccess, data.msg);
+								}, "json");
 							}
 						},
 

@@ -32,20 +32,23 @@ public class MenuService extends BaseService {
 
 	// 数据库添加操作
 	public void add(Menu menu) {
+		rs.setv("ok", false).setv("msg","添加失败，菜单：" + menu.getMenuText());
 		dao.insert(menu);
-		rs.setv("ok", true);
+		rs.setv("ok", true).setv("msg","添加成功，菜单：" + menu.getMenuText());
 	}
 
 	// 数据库更新操作
 	public void edit(Menu menu) {
+		rs.setv("ok", false).setv("msg","修改失败，菜单：" + menu.getMenuText());
 		dao.update(menu);
-		rs.setv("ok", true);
+		rs.setv("ok", true).setv("msg","修改成功，菜单：" + menu.getMenuText());
 	}
 
 	// 数据库删除数据操作
 	public void delete(Menu menu) {
+		rs.setv("ok", false).setv("msg","删除失败，菜单：" + menu.getMenuText());
 		dao.delete(menu);
-		rs.setv("ok", true);
+		rs.setv("ok", true).setv("msg","删除成功，菜单：" + menu.getMenuText());
 	}
 
 	// 用户登录操作

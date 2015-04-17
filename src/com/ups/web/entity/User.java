@@ -5,7 +5,7 @@ import java.util.Date;
 import org.nutz.dao.entity.annotation.*;
 
 @Table("ups_user")
-public class User {
+public class User extends BaseBean{
 	@Id
 	@Comment("唯一标识，整型自增长")
 	private int id;

@@ -3,7 +3,6 @@ package com.ups.web.module.sys;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
-import org.nutz.lang.util.NutMap;
 import org.nutz.mvc.adaptor.PairAdaptor;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
@@ -23,8 +22,6 @@ public class MenuModule {
 	// 注入Service
 	@Inject("menuService")
 	private MenuService service;
-	// 创建请求结果对象（用于返回增、删、改操作结果给用户）
-	private NutMap rs = new NutMap();
 
 	// 用户管理页面初始化
 	@At("/")
@@ -50,15 +47,7 @@ public class MenuModule {
 	// 返回json数据
 	public Object add(@Param("..") Menu menu) {
 		service.add(menu);
-		if (service.rs.getBoolean("ok")) {
-			rs.setv("isSuccess", true).setv("msg",
-					"添加成功，用户名：" + menu.getMenuText());
-		} else {
-			rs.setv("isSuccess", false).setv("msg",
-					"添加失败，用户名：" + menu.getMenuText());
-		}
-		return rs;
-
+		return service.rs;
 	}
 
 	// 用户编辑
@@ -67,14 +56,7 @@ public class MenuModule {
 	// 返回json数据
 	public Object edit(@Param("..") Menu menu) {
 		service.edit(menu);
-		if (service.rs.getBoolean("ok")) {
-			rs.setv("isSuccess", true).setv("msg",
-					"修改成功，用户名：" + menu.getMenuText());
-		} else {
-			rs.setv("isSuccess", false).setv("msg",
-					"修改失败，用户名：" + menu.getMenuText());
-		}
-		return rs;
+		return service.rs;
 	}
 
 	// 用户删除
@@ -83,13 +65,6 @@ public class MenuModule {
 	// 返回json数据
 	public Object delete(@Param("..") Menu menu) {
 		service.delete(menu);
-		if (service.rs.getBoolean("ok")) {
-			rs.setv("isSuccess", true).setv("msg",
-					"删除成功，用户名：" + menu.getMenuText());
-		} else {
-			rs.setv("isSuccess", false).setv("msg",
-					"删除失败，用户名：" + menu.getMenuText());
-		}
-		return rs;
+		return service.rs;
 	}
 }

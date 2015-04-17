@@ -17,11 +17,11 @@
 <body>
 
 	<%@include file="../share/navbar.jsp"%>
-	
+
 	<script type="text/javascript">
 		activeMenu("sys/role");
 	</script>
-	
+
 	<div class="container-fluid">
 		<div class="row" id="role">
 			<div class="col-xs-12">
@@ -39,15 +39,15 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 								<h4 class="modal-title" id="myModalLabel">
-									<span v-show="!show"><i class="fa fa-plus"></i>&nbsp;新增</span><span
-										v-show="show"><i class="fa fa-edit"></i>&nbsp;编辑</span>
+									<span v-show="!isEdit"><i class="fa fa-plus"></i>&nbsp;新增</span><span
+										v-show="isEdit"><i class="fa fa-edit"></i>&nbsp;编辑</span>
 								</h4>
 							</div>
 							<div class="modal-body">
 								<form id="role-editor">
 									<div class="form-group">
 										<label for="rolename">角色名</label> <input type="text"
-											class="form-control" disabled="{{show?'disabled':''}}"
+											class="form-control" disabled="{{isEdit?'disabled':''}}"
 											id="rolename" placeholder="角色名" v-model="form.rolename">
 									</div>
 
@@ -194,7 +194,7 @@
 				pageSize : vue.page.pager.pageSize
 			});
 		};
-		
+
 		var vue = new Vue(
 				{
 					el : "#role",
@@ -248,18 +248,10 @@
 							});
 						},
 						data_save : function() {
-							if (!this.isEdit) {
-								$.post("sys/role/add", this.form,
-										function(data) {
-											showSuccess(data.isSuccess,
-													data.msg);
-										}, "json");
-							} else {
-								$.post("sys/role/edit", this.form, function(
-										data) {
-									showSuccess(data.isSuccess, data.msg);
-								}, "json");
-							}
+							$.post(this.isEdit ? "sys/role/edit" : "sys/role/add",
+									this.form, function(data) {
+										showSuccess(data.ok, data.msg);
+									}, "json");
 						},
 
 						data_delete : function(obj) {

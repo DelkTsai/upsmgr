@@ -4,7 +4,6 @@ import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
-import org.nutz.lang.util.NutMap;
 import org.nutz.mvc.adaptor.PairAdaptor;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
@@ -20,16 +19,17 @@ import com.ups.web.service.RoleService;
 @At("/sys/role")
 @IocBean
 public class RoleModule {
-	
-	//注入Service
+
+	// 注入Service
 	@Inject("roleService")
 	private RoleService service;
-	// 创建请求结果对象（用于返回增、删、改操作结果给用户）
-	private NutMap rs = new NutMap();
 
-	//用户管理页面初始化
+	// 创建请求结果对象（用于返回增、删、改操作结果给用户）
+
+	// 用户管理页面初始化
 	@At("/")
-	@Ok("jsp:page.sys.role")//返回视图
+	@Ok("jsp:page.sys.role")
+	// 返回视图
 	public Object index() {
 		Pager pager = new Pager();
 		pager.setPageNumber(1);
@@ -38,51 +38,40 @@ public class RoleModule {
 		return Json.toJson(service.rs);
 	}
 
-	//角色查询
+	// 角色查询
 	@At("/list")
-	@Ok("json")//返回json数据
+	@Ok("json")
+	// 返回json数据
 	public Object list(@Param("..") Pager pager) {
 		service.find(pager);
 		return service.rs;
 	}
 
-	//角色添加
+	// 角色添加
 	@At("/add")
-	@Ok("json")//返回json数据
+	@Ok("json")
+	// 返回json数据
 	public Object add(@Param("..") Role role) {
 		service.add(role);
-		if (service.rs.getBoolean("ok")) {
-			rs.setv("isSuccess",true).setv("msg", "添加成功，角色名：" + role.getRolename());
-		} else {
-			rs.setv("isSuccess",false).setv("msg", "添加失败，角色名：" + role.getRolename());
-		}
-		return rs;
+		return service.rs;
 
 	}
 
-	//角色编辑
+	// 角色编辑
 	@At("/edit")
-	@Ok("json")//返回json数据
+	@Ok("json")
+	// 返回json数据
 	public Object edit(@Param("..") Role role) {
 		service.edit(role);
-		if (service.rs.getBoolean("ok")) {
-			rs.setv("isSuccess",true).setv("msg", "修改成功，角色名：" + role.getRolename());
-		} else {
-			rs.setv("isSuccess",false).setv("msg", "修改失败，角色名：" + role.getRolename());
-		}
-		return rs;
+		return service.rs;
 	}
 
-	//角色删除
+	// 角色删除
 	@At("/delete")
-	@Ok("json")//返回json数据
+	@Ok("json")
+	// 返回json数据
 	public Object delete(@Param("..") Role role) {
 		service.delete(role);
-		if (service.rs.getBoolean("ok")) {
-			rs.setv("isSuccess",true).setv("msg", "删除成功，角色名：" + role.getRolename());
-		} else {
-			rs.setv("isSuccess",false).setv("msg", "删除失败，角色名：" + role.getRolename());
-		}
-		return rs;
+		return service.rs;
 	}
 }

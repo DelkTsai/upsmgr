@@ -17,7 +17,7 @@ package com.ups.web.entity;
 
 import org.nutz.dao.pager.Pager;
 
-public class Page {
+public class Page extends BaseBean{
 	private Pager pager;
 	private Object data;
 	public Pager getPager() {

@@ -23,20 +23,23 @@ public class RoleService extends BaseService {
 
 	// 数据库添加操作
 	public void add(Role role) {
+		rs.setv("ok",false).setv("msg", "添加失败，角色名：" + role.getRolename());
 		dao.insert(role);
-		rs.setv("ok", true);
+		rs.setv("ok",true).setv("msg", "添加成功，角色名：" + role.getRolename());
 	}
 
 	// 数据库更新操作
 	public void edit(Role role) {
+		rs.setv("ok",false).setv("msg", "修改失败，角色名：" + role.getRolename());
 		dao.update(role);
-		rs.setv("ok", true);
+		rs.setv("ok",true).setv("msg", "修改成功，角色名：" + role.getRolename());
 	}
 
 	// 数据库删除数据操作
 	public void delete(Role role) {
+		rs.setv("ok",false).setv("msg", "删除失败，角色名：" + role.getRolename());
 		dao.delete(role);
-		rs.setv("ok", true);
+		rs.setv("ok",true).setv("msg", "删除成功，角色名：" + role.getRolename());
 	}
 
 	

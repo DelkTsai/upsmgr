@@ -46,21 +46,24 @@ public class DeviceService extends BaseService {
 
 	// 数据库添加操作
 	public void add(Device device) {
+		rs.setv("ok", false).setv("msg","添加失败，设备编号：" + device.getDeviceId());
 		device.setInstallTime(new Date());
 		dao.insert(device);
-		rs.setv("ok", true);
+		rs.setv("ok", true).setv("msg",  "添加成功，设备编号：" + device.getDeviceId());
 	}
 
 	// 数据库更新操作
 	public void edit(Device device) {
+		rs.setv("ok", false).setv("msg","更新失败，设备编号：" + device.getDeviceId());
 		dao.updateIgnoreNull(device);
-		rs.setv("ok", true);
+		rs.setv("ok", true).setv("msg",  "更新成功，设备编号：" + device.getDeviceId());
 	}
 
 	// 数据库删除数据操作
 	public void delete(Device device) {
+		rs.setv("ok", false).setv("msg",  "删除失败，设备编号：" + device.getDeviceId());
 		dao.delete(device);
-		rs.setv("ok", true);
+		rs.setv("ok", true).setv("msg",  "删除成功，设备编号：" + device.getDeviceId());
 	}
 
 }

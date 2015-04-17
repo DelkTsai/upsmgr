@@ -8,7 +8,7 @@ import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
 @Table("ups_device_data")
-public class DeviceData {
+public class DeviceData extends BaseBean{
 	@Id
 	@Comment("唯一标识，整型自增长")
 	private int id;

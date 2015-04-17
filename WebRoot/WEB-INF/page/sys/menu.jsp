@@ -39,15 +39,15 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 								<h4 class="modal-title" id="myModalLabel">
-									<span v-show="!show"><i class="fa fa-plus"></i>&nbsp;新增</span><span
-										v-show="show"><i class="fa fa-edit"></i>&nbsp;编辑</span>
+									<span v-show="!isEdit"><i class="fa fa-plus"></i>&nbsp;新增</span><span
+										v-show="isEdit"><i class="fa fa-edit"></i>&nbsp;编辑</span>
 								</h4>
 							</div>
 							<div class="modal-body">
 								<form id="menu-editor">
 									<div class="form-group">
-										<label for="menuName">父菜单</label> <select class="form-control"
-											id="menuName" placeholder="父菜单" options="pmenuOptions"
+										<label for="pmenu">父菜单</label> <select class="form-control"
+											id="pmenu" placeholder="父菜单" options="pmenuOptions"
 											v-model="form.pmenu"></select>
 									</div>
 									<div class="form-group">
@@ -70,7 +70,8 @@
 									<div class="form-group">
 										<label for="menuLink">URL</label> <input type="text"
 											class="form-control" id="menuLink" placeholder="链接"
-											v-model="form.menuLink">
+											disabled="{{form.hasChild&isEdit?'disabled':''}}"
+											v-model="form.menuLink" value="{{isEdit&form.pmenu!=0?'':'#'}}">
 									</div>
 
 								</form>
@@ -254,21 +255,16 @@
 					});
 				},
 				data_save : function() {
-					if (!this.isEdit) {
-						$.post("sys/menu/add", this.form, function(data) {
-							showSuccess(data.isSuccess, data.msg);
-						}, "json");
-					} else {
-						$.post("sys/menu/edit", this.form, function(data) {
-							showSuccess(data.isSuccess, data.msg);
-						}, "json");
-					}
+					$.post(this.isEdit ? "sys/menu/edit" : "sys/menu/add",
+							this.form, function(data) {
+								showSuccess(data.ok, data.msg);
+							}, "json");
 				},
 
 				data_delete : function(obj) {
 					if (confirm("确认删除菜单：" + obj.menuText)) {
 						$.post("sys/menu/delete", obj, function(data) {
-							showSuccess(data.isSuccess, data.msg);
+							showSuccess(data.ok, data.msg);
 						}, "json");
 					}
 				},
@@ -287,7 +283,6 @@
 
 		});
 
-	
 		$("input[type=\"checkbox\"], input[type=\"radio\"]").not(
 				"[data-switch-no-init]").bootstrapSwitch("size", "mini");
 	</script>

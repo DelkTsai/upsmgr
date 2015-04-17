@@ -36,15 +36,15 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 								<h4 class="modal-title" id="myModalLabel">
-									<span v-show="!show"><i class="fa fa-plus"></i>&nbsp;新增</span><span
-										v-show="show"><i class="fa fa-edit"></i>&nbsp;编辑</span>
+									<span v-show="!isEdit"><i class="fa fa-plus"></i>&nbsp;新增</span><span
+										v-show="isEdit"><i class="fa fa-edit"></i>&nbsp;编辑</span>
 								</h4>
 							</div>
 							<div class="modal-body">
 								<form id="dev-editor">
 									<div class="form-group">
 										<label for="deviceId">设备编号</label> <input type="text"
-											disabled="{{show?'disabled':''}}" class="form-control"
+											disabled="{{isEdit?'disabled':''}}" class="form-control"
 											id="deviceId" placeholder="设备编号" v-model="form.deviceId">
 									</div>
 									<div class="form-group">
@@ -78,10 +78,10 @@
 			<div class="col-xs-12 main">
 				<div class="form-inline page-header">
 					<select class="form-control" v-model="condition.status"
-						options="statusOptions" style="width:100px;display: inline-block;"></select>
-					<input type="text" class="form-control"
-						v-model="condition.deviceId" placeholder="设备编号"
-						style="width:100px;display: inline-block;" />
+						options="statusOptions"
+						style="width: 100px; display: inline-block;"></select> <input
+						type="text" class="form-control" v-model="condition.deviceId"
+						placeholder="设备编号" style="width: 100px; display: inline-block;" />
 
 					<button class="btn btn-success" v-on="click:search">
 						<i class="fa fa-search"></i>
@@ -188,12 +188,12 @@
 				pageSize : vue.page.pager.pageSize
 			});
 		};
-		
+
 		var vue = new Vue(
 				{
 					el : "#sys",
 					data : {
-						show : false,
+						isEdit : false,
 						methodOptions : [ {
 							text : 'WIFI',
 							value : '0'
@@ -246,26 +246,20 @@
 							});
 						},
 						data_save : function() {
-							if (!this.show) {
-								$.post("dev/add", this.form, function(data) {
-									showSuccess(data.isSuccess, data.msg);
-								}, "json");
-							} else {
-								$.post("dev/edit", this.form, function(data) {
-									showSuccess(data.isSuccess, data.msg);
-								}, "json");
-							}
+							$.post(this.isEdit ? "dev/edit" : "dev/add",
+									this.form, function(data) {
+										showSuccess(data.ok, data.msg);
+									}, "json");
 						},
-
 						data_edit : function(obj) {
 							$('#myModal').modal('show');
 							this.form = clone(obj);
-							this.show = true;
+							this.isEdit = true;
 						},
 						data_add : function() {
 							$('#myModal').modal('show');
 							$("#dev-editor")[0].reset();
-							this.show = false;
+							this.isEdit = false;
 						},
 						data_delete : function(obj) {
 							if (confirm("确认删除设备：" + obj.deviceId)) {
@@ -309,7 +303,6 @@
 					}
 
 				});
-
 	</script>
 </body>
 </html>

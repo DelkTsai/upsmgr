@@ -5,7 +5,7 @@ import java.util.List;
 import org.nutz.dao.entity.annotation.*;
 
 @Table("ups_menu")
-public class Menu {
+public class Menu extends BaseBean{
 	@Id
 	@Comment("唯一标识，整型自增长")
 	private int id;
