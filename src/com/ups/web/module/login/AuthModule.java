@@ -57,6 +57,8 @@ public class AuthModule {
 		service.login(user);
 		if (service.rs.getBoolean("ok")) {
 			session.setAttribute("curruser", service.rs.get("user"));
+			mservice.find();
+			session.setAttribute("menus", Json.toJson(mservice.rs.get("list")));
 			return "";
 		}else{
 			session.setAttribute("msg", service.rs.get("msg"));

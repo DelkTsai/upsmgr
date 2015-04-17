@@ -112,7 +112,7 @@
 	</div>
 </div>
 <script>
-	var menu = ${menus}
+	
 	var navbar = new Vue({
 		el : "#navbar",
 		data : {

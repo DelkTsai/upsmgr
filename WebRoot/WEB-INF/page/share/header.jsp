@@ -91,4 +91,5 @@
 	};
 	
 	var data = ${obj};
+	var menu = ${menus}
 </script>
