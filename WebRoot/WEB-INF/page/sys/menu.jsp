@@ -147,7 +147,7 @@
 								<td>{{sub.menuLink}}</td>
 								<td>{{sub.status}}</td>
 							</tr>
-
+						<tr v-show="page.list.length<1"><td align="center" colspan="7">无数据</td></tr>
 						</tbody>
 						<tfoot>
 							<tr>

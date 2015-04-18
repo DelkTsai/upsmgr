@@ -117,10 +117,11 @@
 								<td>{{dev.status==0?'正常':'异常'}}</td>
 								<td>{{dev.comment}}</td>
 							</tr>
+							<tr v-show="page.list.length<1"><td align="center" colspan="7">无数据</td></tr>
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="7"><%@include file="share/pager.jsp"%></td>
+								<td colspan="6"><%@include file="share/pager.jsp"%></td>
 							</tr>
 						</tfoot>
 					</table>

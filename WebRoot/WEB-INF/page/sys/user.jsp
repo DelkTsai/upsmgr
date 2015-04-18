@@ -51,14 +51,14 @@
 											id="username" placeholder="用户名" v-model="form.username">
 									</div>
 									<div class="form-group">
-										<label for="nickname">昵称</label> <input type="text"
-											class="form-control" id="nickname" placeholder="昵称"
-											v-model="form.nickname">
-									</div>
-									<div class="form-group">
 										<label for="roleid">角色</label> <select class="form-control"
 											id="roleid" v-model="form.roleid" options="roleOptions"
 											placeholder="角色"></select>
+									</div>
+									<div class="form-group">
+										<label for="nickname">昵称</label> <input type="text"
+											class="form-control" id="nickname" placeholder="昵称"
+											v-model="form.nickname">
 									</div>
 
 									<div class="form-group">
@@ -133,6 +133,7 @@
 								</td>
 								<td>{{user.comment}}</td>
 							</tr>
+							<tr v-show="page.list.length<1"><td align="center" colspan="8">无数据</td></tr>
 						</tbody>
 						<tfoot>
 							<tr>

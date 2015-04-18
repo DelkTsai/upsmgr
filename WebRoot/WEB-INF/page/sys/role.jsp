@@ -125,6 +125,7 @@
 									</button></td>
 								<td>{{role.comment}}</td>
 							</tr>
+							<tr v-show="page.list.length<1"><td align="center" colspan="8">无数据</td></tr>
 						</tbody>
 						<tfoot>
 							<tr>

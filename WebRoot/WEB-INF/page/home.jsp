@@ -67,6 +67,7 @@
 								<td>{{communicateMethod==0?'WIFI':'RS232'}}</td>
 								<td>{{comment}}</td>
 							</tr>
+							<tr v-show="page.list.length<1"><td align="center" colspan="8">无数据</td></tr>
 						</tbody>
 						<tfoot>
 							<tr>
