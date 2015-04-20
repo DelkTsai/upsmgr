@@ -10,6 +10,7 @@ import org.nutz.mvc.Setup;
 
 import com.ups.server.Server;
 import com.ups.web.entity.User;
+import com.ups.web.service.WeixinMenuService;
 import com.ups.web.tool.DESKey;
 
 //程序启动初始化类
@@ -17,7 +18,8 @@ public class MainSetup implements Setup {
 
 	@Override
 	public void init(NutConfig conf) {
-
+		WeixinMenuService wms = new WeixinMenuService();
+		wms.menu_create(wms.wxm);
 		Ioc ioc = conf.getIoc();
 		Dao dao = ioc.get(Dao.class);
 		Daos.createTablesInPackage(dao, "com.ups.web", false);

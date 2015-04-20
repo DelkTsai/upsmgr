@@ -35,4 +35,6 @@ public class MyWxHandler extends BasicWxHandler {
 	public WxOutMsg image(WxInMsg msg) {
 		return Wxs.respImage(null, msg.getMediaId());
 	}
+	
+	
 }
