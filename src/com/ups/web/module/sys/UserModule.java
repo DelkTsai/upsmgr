@@ -10,7 +10,7 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
-import com.ups.web.entity.User;
+import com.ups.web.bean.User;
 import com.ups.web.service.UserService;
 
 //用户管理的Controller类

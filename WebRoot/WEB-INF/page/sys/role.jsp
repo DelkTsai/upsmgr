@@ -46,16 +46,23 @@
 							<div class="modal-body">
 								<form id="role-editor">
 									<div class="form-group">
-										<label for="rolename">角色名</label> <input type="text"
+										<label for="name">角色名</label> <input type="text"
 											class="form-control" disabled="{{isEdit?'disabled':''}}"
-											id="rolename" placeholder="角色名" v-model="form.rolename">
+											id="name" placeholder="角色名" v-model="form.name">
 									</div>
 
+									<div class="form-group">
+										<label for="alias">别名</label> <input class="form-control"
+											id="alias" v-model="form.alias" placeholder="别名">
+									</div>
+									
+									<!-- 
 									<div class="form-group">
 										<label for="orgid">组织</label> <select class="form-control"
 											id="orgid" v-model="form.orgid" options="orgOptions"
 											placeholder="组织"></select>
 									</div>
+									 -->
 									<div class="form-group">
 										<label for="comment">备注</label> <input type="text"
 											class="form-control" id="comment" placeholder="备注"
@@ -93,11 +100,9 @@
 							<tr>
 								<th>#</th>
 								<th>角色名</th>
-								<th>组织</th>
-								<th>新增权限</th>
-								<th>删除权限</th>
-								<th>更改权限</th>
-								<th>查看权限</th>
+								<th>别名</th>
+								<th>更新时间</th>
+								<th>创建时间</th>
 								<th>备注</th>
 							</tr>
 						</thead>
@@ -109,20 +114,10 @@
 									title="删除" v-on="click:data_delete(role)" href="javascript:;"><i
 										class="fa fa-trash fa-lg text-danger"></i></a>
 									&nbsp;&nbsp;&nbsp;{{(page.pager.pageNumber-1)*page.pager.pageSize+$index+1}}</td>
-								<td>{{role.rolename}}</td>
-								<td>{{getRole(role.orgid)}}</td>
-								<td><button class="btn btn-warning btn-xs">
-										<i class="fa fa-plus"></i>
-									</button></td>
-								<td><button class="btn btn-warning btn-xs">
-										<i class="fa fa-trash"></i>
-									</button></td>
-								<td><button class="btn btn-warning btn-xs">
-										<i class="fa fa-edit"></i>
-									</button></td>
-								<td><button class="btn btn-warning btn-xs">
-										<i class="fa fa-eye"></i>
-									</button></td>
+								<td>{{role.name}}</td>
+								<td>{{role.alias}}</td>
+								<td>{{role.updateTime}}</td>
+								<td>{{role.createTime}}</td>
 								<td>{{role.comment}}</td>
 							</tr>
 							<tr v-show="page.list.length<1"><td align="center" colspan="8">无数据</td></tr>
@@ -215,7 +210,7 @@
 							value : '4'
 						} ],
 						form : {
-							rolename : "test",
+							name : "test",
 							orgid : "1",
 							comment : "测试数据"
 						},
@@ -256,7 +251,7 @@
 						},
 
 						data_delete : function(obj) {
-							if (confirm("确认删除角色：" + obj.rolename)) {
+							if (confirm("确认删除角色：" + obj.name)) {
 								$.post("sys/role/delete", obj, function(data) {
 									showSuccess(data.isSuccess, data.msg);
 								}, "json");

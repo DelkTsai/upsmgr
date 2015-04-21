@@ -9,7 +9,7 @@ import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 
-import com.ups.web.entity.Device;
+import com.ups.web.bean.Device;
 
 //设备Service，处理设备的业务逻辑，数据库访问
 @IocBean

@@ -16,8 +16,8 @@ import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
-import com.ups.web.entity.Device;
-import com.ups.web.entity.User;
+import com.ups.web.bean.Device;
+import com.ups.web.bean.User;
 import com.ups.web.service.DeviceDataService;
 import com.ups.web.service.DeviceService;
 import com.ups.web.service.MenuService;

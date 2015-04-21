@@ -19,7 +19,7 @@ public class WeixinMenuService extends WxApi2Impl{
 		wxm = new ArrayList<WxMenu>();
 		WxMenu wm1 = new WxMenu();
 		wm1.setKey("menu1");
-		wm1.setName("首页");
+		wm1.setName("微官网");
 		wm1.setType("view");
 		wm1.setUrl("http://loyal.wicp.net/upsmgr");
 		

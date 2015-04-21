@@ -8,7 +8,7 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
-import com.ups.web.entity.Device;
+import com.ups.web.bean.Device;
 import com.ups.web.service.DeviceService;
 
 //设备管理的Controller类

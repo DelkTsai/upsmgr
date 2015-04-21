@@ -3,7 +3,7 @@ package com.ups.server.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ups.web.entity.DeviceData;
+import com.ups.web.bean.DeviceData;
 
 public class ServerCache extends Thread {
 	public static StringBuilder data = new StringBuilder();

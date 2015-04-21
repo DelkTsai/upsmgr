@@ -52,7 +52,7 @@
 									</div>
 									<div class="form-group">
 										<label for="roleid">角色</label> <select class="form-control"
-											id="roleid" v-model="form.roleid" options="roleOptions"
+											id="roleid" v-model="form.roleid" options="roleOptions" multiple
 											placeholder="角色"></select>
 									</div>
 									<div class="form-group">
@@ -104,7 +104,6 @@
 							<tr>
 								<th>#</th>
 								<th>用户名</th>
-								<th>昵称</th>
 								<th>角色</th>
 								<th>创建时间</th>
 								<th>更新时间</th>
@@ -121,15 +120,14 @@
 										class="fa fa-trash fa-lg text-danger"></i></a>
 									&nbsp;&nbsp;&nbsp;{{(page.pager.pageNumber-1)*page.pager.pageSize+$index+1}}</td>
 								<td>{{user.username}}</td>
-								<td>{{user.nickname}}</td>
-								<td>{{getRole(user.roleid)}}</td>
+								<td><span class="label label-warning"><template v-repeat="user.roles">{{$index==0?alias:", "+alias}}</template></span></td>
 								<td>{{user.createTime}}</td>
 								<td>{{user.updateTime}}</td>
 								<td><label
-									class="label label-{{user.status==0?'success':'danger'}}">{{user.status==0?'已启用':'已禁用'}}</label>
+									class="label label-{{user.locked?'success':'danger'}}">{{user.locked?'已启用':'已禁用'}}</label>
 									<button
-										class="btn btn-{{user.status!=0?'success':'danger'}} btn-xs"
-										v-on="click:switch_status(user)">{{user.status!=0?'启用':'禁用'}}</button>
+										class="btn btn-{{!user.locked?'success':'danger'}} btn-xs"
+										v-on="click:switch_status(user)">{{!user.locked?'启用':'禁用'}}</button>
 								</td>
 								<td>{{user.comment}}</td>
 							</tr>
@@ -217,7 +215,7 @@
 							});
 							$(data["roles"]).each(function(index, item) {
 								opt.push({
-									text : item["rolename"],
+									text : item["alias"],
 									value : item["id"]
 								});
 							});
@@ -246,8 +244,7 @@
 					},
 					methods : {
 						switch_status : function(user) {
-							user.status == 0 ? user.status = 1
-									: user.status = 0;
+							user.locked = !user.locked;
 							this.form = clone(user);
 							$.post("sys/user/edit", this.form,
 									function(data) {

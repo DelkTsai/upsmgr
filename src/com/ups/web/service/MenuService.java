@@ -5,7 +5,7 @@ import java.util.List;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.IocBean;
 
-import com.ups.web.entity.Menu;
+import com.ups.web.bean.Menu;
 
 //用户Service，处理用户的业务逻辑，数据库访问
 @IocBean
@@ -18,14 +18,8 @@ public class MenuService extends BaseService {
 		List<Menu> list=null;
 		list = dao.query(Menu.class, Cnd.where("pmenu", "=", "0"));
 		for (Menu menu : list) {
-			menu.setSubMenus(dao.query(Menu.class, Cnd.where("pmenu", "=", menu.getId())));
-			menu.setExpand(false);
-			menu.setActive(false);
-			if (menu.getSubMenus().isEmpty()) {
-				menu.setHasChild(false);
-			}else{
-				menu.setHasChild(true);
-			}
+			menu = dao.fetchLinks(menu, "subMenus");
+			if(!menu.getSubMenus().isEmpty()) menu.setHasChild(true);
 		}
 		rs.setv("ok", true).setv("list", list);
 	}

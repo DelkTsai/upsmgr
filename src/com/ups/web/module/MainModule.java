@@ -47,6 +47,7 @@
 package com.ups.web.module;
 
 import org.nutz.mvc.annotation.By;
+import org.nutz.mvc.annotation.ChainBy;
 import org.nutz.mvc.annotation.Fail;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.IocBy;
@@ -56,7 +57,7 @@ import org.nutz.mvc.annotation.SetupBy;
 import org.nutz.mvc.ioc.provider.ComboIocProvider;
 
 import com.ups.web.MainSetup;
-import com.ups.web.filter.SessionCheck;
+import com.ups.web.mvc.SessionCheck;
 
 @Modules(scanPackage = true)
 @Ok("json")
@@ -65,6 +66,7 @@ import com.ups.web.filter.SessionCheck;
 @IocBy(type=ComboIocProvider.class,args={"*js", "ioc/",
     "*anno", "com.ups.web",
     "*tx"})
+@ChainBy(args="mvc/mvc-chain.js")
 @SetupBy(value=MainSetup.class)
 public class MainModule {
 

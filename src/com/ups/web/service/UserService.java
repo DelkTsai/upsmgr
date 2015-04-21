@@ -11,8 +11,8 @@ import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 
-import com.ups.web.entity.Role;
-import com.ups.web.entity.User;
+import com.ups.web.bean.Role;
+import com.ups.web.bean.User;
 import com.ups.web.tool.DESKey;
 
 //用户Service，处理用户的业务逻辑，数据库访问
@@ -41,11 +41,12 @@ public class UserService extends BaseService {
 			cnd = Cnd
 					.where("username",
 							Strings.isBlank(user.getUsername()) ? "<>" : "=",
-							user.getUsername())
-					.and("roleid", user.getRoleid() < 0 ? "<>" : "=",
-							user.getRoleid()).desc("createTime");
+							user.getUsername());
 		pager.setRecordCount(dao.count(User.class, cnd));
 		list = dao.query(User.class, cnd, pager);
+		for (User user2 : list) {
+			user2 = dao.fetchLinks(user2, "roles");
+		}
 		rs.setv("ok", true).setv("pager", pager).setv("list", list)
 				.setv("roles", dao.query(Role.class, null));
 	}

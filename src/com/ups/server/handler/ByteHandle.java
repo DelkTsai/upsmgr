@@ -2,7 +2,7 @@ package com.ups.server.handler;
 
 import java.util.Date;
 
-import com.ups.web.entity.DeviceData;
+import com.ups.web.bean.DeviceData;
 
 //
 public class ByteHandle extends Thread {

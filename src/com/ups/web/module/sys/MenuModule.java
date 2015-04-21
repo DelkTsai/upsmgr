@@ -9,7 +9,7 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
-import com.ups.web.entity.Menu;
+import com.ups.web.bean.Menu;
 import com.ups.web.service.MenuService;
 
 //用户管理的Controller类

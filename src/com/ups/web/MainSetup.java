@@ -9,7 +9,7 @@ import org.nutz.mvc.NutConfig;
 import org.nutz.mvc.Setup;
 
 import com.ups.server.Server;
-import com.ups.web.entity.User;
+import com.ups.web.bean.User;
 import com.ups.web.service.WeixinMenuService;
 import com.ups.web.tool.DESKey;
 
@@ -31,7 +31,6 @@ public class MainSetup implements Setup {
 				User user = new User();
 				user.setUsername("admin");
 				user.setPassword(des.encrypt("123456"));
-				user.setNickname("最高管理员");
 				user.setCreateTime(new Date());
 				user.setUpdateTime(new Date());
 				dao.insert(user);
