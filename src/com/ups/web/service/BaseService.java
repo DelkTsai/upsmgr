@@ -1,13 +1,20 @@
 package com.ups.web.service;
 
 import org.nutz.dao.Dao;
-import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.lang.util.NutMap;
+import org.nutz.service.IdNameEntityService;
 
-public class BaseService {
-	@Inject protected Dao dao;
+public class BaseService<T> extends IdNameEntityService<T> {
 	public NutMap rs = new NutMap();
 	public BaseService() {
-		rs.setv("ok", false);
+		super();
 	}
+	
+	public BaseService(Dao dao){
+		super(dao);
+	}
+	
+	 public BaseService(Dao dao, Class<T> entityType) {
+	        super(dao, entityType);
+	    }
 }

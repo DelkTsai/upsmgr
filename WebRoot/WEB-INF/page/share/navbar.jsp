@@ -29,6 +29,7 @@
 						</ul>
 						</template>
 					</li>
+					
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a><i class="fa fa-user" style="font-size: 18px;"></i>&nbsp;欢迎，${curruser.username}</a></li>
@@ -43,7 +44,7 @@
 							</a></li>
 							<!--  <li class="divider"></li>  -->
 						</ul></li>
-					<li><a href="exit">退出&nbsp;<i class="fa fa-sign-out"></i></a></li>
+					<li><a href="user/logout">退出&nbsp;<i class="fa fa-sign-out"></i></a></li>
 				</ul>
 				<!--
 			<form class="navbar-form navbar-right">

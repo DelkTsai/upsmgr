@@ -62,7 +62,7 @@ import com.ups.web.mvc.SessionCheck;
 @Modules(scanPackage = true)
 @Ok("json")
 @Fail("json")
-@Filters(@By(type = SessionCheck.class, args = { "curruser", "/" }))
+//@Filters(@By(type = SessionCheck.class, args = { "curruser", "/" }))
 @IocBy(type=ComboIocProvider.class,args={"*js", "ioc/",
     "*anno", "com.ups.web",
     "*tx"})

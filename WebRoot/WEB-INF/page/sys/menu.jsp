@@ -1,15 +1,9 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
-%>
 
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<base href="<%=path%>/">
+<base href="${base}/">
 <title>首页-UPS管理系统</title>
 <%@include file="../share/header.jsp"%>
 </head>
@@ -187,7 +181,7 @@
 		}
 
 		function data_list(pager) {
-			$.getJSON("sys/menu/list", $.extend(pager, vue.condition),
+			$.getJSON("/sys/menu/list", $.extend(pager, vue.condition),
 					function(data) {
 						vue.page = data;
 					});
@@ -255,7 +249,7 @@
 					});
 				},
 				data_save : function() {
-					$.post(this.isEdit ? "sys/menu/edit" : "sys/menu/add",
+					$.post(this.isEdit ? "/sys/menu/edit" : "/sys/menu/add",
 							this.form, function(data) {
 								showSuccess(data.ok, data.msg);
 							}, "json");
@@ -263,7 +257,7 @@
 
 				data_delete : function(obj) {
 					if (confirm("确认删除菜单：" + obj.menuText)) {
-						$.post("sys/menu/delete", obj, function(data) {
+						$.post("/sys/menu/delete", obj, function(data) {
 							showSuccess(data.ok, data.msg);
 						}, "json");
 					}

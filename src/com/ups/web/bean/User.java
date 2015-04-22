@@ -2,6 +2,7 @@ package com.ups.web.bean;
 
 import java.util.List;
 
+import org.nutz.dao.entity.annotation.ColDefine;
 import org.nutz.dao.entity.annotation.Column;
 import org.nutz.dao.entity.annotation.Comment;
 import org.nutz.dao.entity.annotation.Id;
@@ -21,9 +22,14 @@ public class User extends BasePojo {
 	private String username;
 
 	@Column
+	@ColDefine(width=128)
 	@Comment("密码（系统用户）")
 	private String password;
 
+	@Column
+	@Comment("密码加盐")
+	private String salt;
+	
 	@Column
 	@Comment("是否锁定")
 	private boolean locked;
@@ -63,6 +69,14 @@ public class User extends BasePojo {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 
 	public boolean isLocked() {

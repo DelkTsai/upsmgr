@@ -1,15 +1,9 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
-%>
 
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<base href="<%=path%>/">
+<base href="${base}/">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,7 +41,7 @@
 
 	<div class="container" style="padding-top: 5%;">
 
-		<form class="form-signin" action="login" method="post">
+		<form class="form-signin" action="user/login" method="post">
 			<h3 class="pull-right inline">UPS管理系统</h3>
 			<h2 class="form-signin-heading text-primary">
 				<i class="glyphicon glyphicon-user"></i>
