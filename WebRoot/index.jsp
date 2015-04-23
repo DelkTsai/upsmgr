@@ -41,24 +41,33 @@
 
 	<div class="container" style="padding-top: 5%;">
 
-		<form class="form-signin" action="user/login" method="post">
+		<form class="form-signin">
 			<h3 class="pull-right inline">UPS管理系统</h3>
 			<h2 class="form-signin-heading text-primary">
 				<i class="glyphicon glyphicon-user"></i>
 			</h2>
-			<label for="inputEmail" class="sr-only">用户名</label> <input type="text" id="username" name="username" class="form-control" placeholder="用户名" required autofocus> <label for="inputPassword" class="sr-only">密码</label> <input type="password" name="password" id="password" class="form-control" placeholder="密码" required>
+				<br>
+			<label for="inputEmail" class="sr-only">用户名</label> <input
+				type="text" id="username" name="username" class="form-control"
+				placeholder="用户名" required autofocus> 
+				<br>
+				<label
+				for="inputPassword" class="sr-only">密码</label> <input
+				type="password" name="password" id="password" class="form-control"
+				placeholder="密码" required>
 			<div class="checkbox">
-				<label> 
-				<!-- <input type="checkbox" value="remember-me"> 记住我 -->
-				
-				</label>
-				<span id="msg" class="pull-right text-danger">${msg}</span>
+				<label> <!-- <input type="checkbox" value="remember-me"> 记住我 -->
+
+				</label> <span id="msg" class="pull-right text-danger">${msg}</span>
 			</div>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">
+			<button class="btn btn-lg btn-primary btn-block" type="button"
+				id="login">
 				<i class="fa fa-sign-in "></i>&nbsp;登录
 			</button>
-			
-			<%session.removeAttribute("msg"); %>
+
+			<%
+				session.removeAttribute("msg");
+			%>
 		</form>
 
 	</div>
@@ -66,8 +75,27 @@
 
 	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 	<script src="assets/js/ie10-viewport-bug-workaround.js"></script>
-	
+
 	<script type="text/javascript">
+		$("#login").click(function() {
+			$.ajax({
+				url : "login",
+				type: "POST",
+				data:$("form").serialize(),
+				error: function(request) {
+					window.location = "home";
+				},
+				dataType:"json",
+				success: function(data) {
+					if (data && data.ok) {
+						window.location = "home";
+					} else {
+						alert(data.msg);
+					}
+				}
+			});
+			
+		});
 		$("input").click(function() {
 			$("#msg").html("");
 		});

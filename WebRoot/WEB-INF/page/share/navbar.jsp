@@ -44,7 +44,7 @@
 							</a></li>
 							<!--  <li class="divider"></li>  -->
 						</ul></li>
-					<li><a href="user/logout">退出&nbsp;<i class="fa fa-sign-out"></i></a></li>
+					<li><a href="logout">退出&nbsp;<i class="fa fa-sign-out"></i></a></li>
 				</ul>
 				<!--
 			<form class="navbar-form navbar-right">

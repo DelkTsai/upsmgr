@@ -27,7 +27,7 @@ public class MainSetup implements Setup {
 		}
 
 		// 开启数据采集服务
-		Server.start();
+//		Server.start();
 
 	}
 

@@ -2,7 +2,8 @@ package com.ups.web.module;
 
 import java.util.List;
 
-import org.apache.shiro.authz.annotation.RequiresUser;
+import javax.servlet.http.HttpSession;
+
 import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -23,18 +24,20 @@ public class HomeModule {
 	// 注入Service
 		@Inject("userService")
 		private UserService service;
+		@Inject("menuService")
+		private MenuService mservice;
 		@Inject("deviceService")
 		private DeviceService dservice;
 		@Inject("deviceDataService")
 		private DeviceDataService ddservice;
-		@Inject("menuService")
-		private MenuService mservice;
 	
 	// 首页
-	@RequiresUser
 	@At("/home")
 	@Ok("jsp:page.home")
-	public Object home() {
+	public Object home(HttpSession session) {
+		mservice.find();
+		session.setAttribute("menus", mservice.rs.get("list"));
+		session.setAttribute("curruser", service.fetch((int)session.getAttribute("me")));
 		Pager pager = new Pager();
 		pager.setPageNumber(1);
 		pager.setPageSize(25);
