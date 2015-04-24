@@ -8,7 +8,10 @@ import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Fail;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
+import org.nutz.mvc.annotation.Param;
 
+import com.ups.web.bean.User;
 import com.ups.web.service.MenuService;
 import com.ups.web.service.UserService;
 
@@ -29,8 +32,18 @@ public class LoginModule {
 	// 登录页面
 	@GET
 	@At("/login")
-	@Ok("jsp:/index")
-	public void loginPage() { }
+	@Ok("->:/")
+	public void loginPage() {	}
+	
+	// 登录页面
+		@POST
+		@At("/login")
+		@Ok(">>:/home")
+		public Object login(@Param("..")User user,HttpSession session) {
+			service.login(user);
+			session.setAttribute("login", service.rs);
+			return null;
+		}
 
 	// 用户密码修改
 	@At("/changePassword")

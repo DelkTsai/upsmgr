@@ -6,7 +6,6 @@ import org.nutz.ioc.Ioc;
 import org.nutz.mvc.NutConfig;
 import org.nutz.mvc.Setup;
 
-import com.ups.server.Server;
 import com.ups.web.bean.User;
 import com.ups.web.service.UserService;
 

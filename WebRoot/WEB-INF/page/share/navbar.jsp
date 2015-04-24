@@ -137,7 +137,6 @@
 		if (menu.indexOf("/")>0) {
 			$(navbar.menus).each(function(index, item) {
 				if (item.menuLink == "#") {
-					item.active = true;
 					$(item.subMenus).each(function(index, sitem) {
 						if (sitem.menuLink == menu) {
 							item.active = true;

@@ -19,6 +19,7 @@ public class TestWeixin {
 	String encodingAesKey = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG";
 	String token = "loyal";
 	String appId = "wx7193c2d6b190a8eb";
+	String appsecret = "8cbf3298f61e426b5130f91b6eb9c7f5";
 
 	protected WxHandler wxHandler;
 

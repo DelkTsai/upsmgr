@@ -13,7 +13,7 @@ public class MyWxHandler extends BasicWxHandler {
 
 	@Override
 	public WxOutMsg defaultMsg(WxInMsg msg) {
-		return Wxs.respText(null, "消息类型："+msg.getMsgType());
+		return Wxs.respText(null, "欢迎加入XXX");
 	}
 	
 	@Override
