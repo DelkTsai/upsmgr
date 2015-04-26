@@ -50,12 +50,12 @@ public class WxUserModule {
 			}
 		};
 		api.user_get(each);
-		
+
 		List<WxResp> resps = new ArrayList<WxResp>();
 		for (String string : list) {
 			resps.add(api.user_info(string, "zh_CN"));
 		}
-		
+
 		return Json.toJson(rs.setv("list", resps));
 	}
 

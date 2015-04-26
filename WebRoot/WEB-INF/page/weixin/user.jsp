@@ -89,16 +89,18 @@
 
 
 			<div class="col-xs-12 main">
-				<div class="page-header">
-				
-				</div>
-				<ul class="list-group col-sm-6 col-md-4 col-lg-2"  v-repeat="user:page.list">
-					<li class="list-group-item"><img alt="头像" src="{{user.headimgurl}}" width="120" height="120" align="middle"></li>
-					<li class="list-group-item">{{user.nickname}}</li>
-					<li class="list-group-item">{{user.sex==0?"女":"男"}}</li>
-					<li class="list-group-item">{{user.language=="zh_CN"?"中文":"外语"}}</li>
-					<li class="list-group-item">{{user.province}} {{user.city}}</li>
-					<li class="list-group-item">{{user.country}}</li>
+				<div class="page-header"></div>
+				<ul class="list-group list-inline col-sm-6 col-md-4 col-lg-3 text-center" v-repeat="user:page.list">
+					<li class="list-group-item text-left" style="color: #999;padding: 20px;min-width: 280px;">
+					<img  alt="头像"
+						src="{{user.headimgurl}}" width="120" height="120" align="left" style="margin-right: 20px;">
+						<span>昵称：{{user.nickname}}</span><br>
+						<span>性别：{{user.sex==0?"女":"男"}}</span><br>
+						<span>国家：{{user.country}}</span><br>
+						<span>城市：{{user.province}}</span><br>
+						<span>区县：{{user.city}}</span><br>
+						<span>备注：<input class="form-control" style="height: 20px;width: 50px;display: inline;" v-model="user.remark"></span>
+					</li>
 				</ul>
 			</div>
 		</div>

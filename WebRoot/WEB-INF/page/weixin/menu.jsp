@@ -106,34 +106,32 @@
 						</thead>
 						<tbody v-repeat="menu:page.list.menu.button">
 							<tr>
-								<td><a title="编辑" href="javascript:;"
-									v-on="click:data_edit(menu)"><i
-										class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;&nbsp; <a
-									title="删除" v-on="click:data_delete(menu)" href="javascript:;"><i
-										class="fa fa-trash fa-lg text-danger"></i></a> &nbsp;&nbsp; <template
-										v-if="menu.hasChild"> <a title="展开"
-										v-on="click:toggle(menu)" href="javascript:;"><i
-										class="fa fa-{{menu.expand?'minus':'plus'}}"></i></a> </template> <template
-										v-if="!menu.hasChild"> <a title="展开"
-										href="javascript:;"><i class="fa fa-minus"></i></a> </template>
-									&nbsp;&nbsp;&nbsp;{{$index+1}}</td>
+								<td>
+									<a title="编辑" href="javascript:;"v-on="click:data_edit(menu)">
+									<i class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;&nbsp; 
+									<a title="删除" v-on="click:data_delete(menu)" href="javascript:;">
+										<i class="fa fa-trash fa-lg text-danger"></i>
+									</a>&nbsp;&nbsp;{{$index+1}}&nbsp;&nbsp;
+									<template v-if="menu.sub_button.length>0"> 
+										<a title="展开" v-on="click:toggle(menu)" href="javascript:;">
+											<i class="fa fa-{{menu.expand?'caret-right':'caret-down'}}"></i>
+										</a> 
+									</template>
+								</td>
 								<td class="text-primary" style="font-weight: bold;">一级菜单</td>
 								<td>{{menu.type}}</td>
 								<td>{{menu.name}}</td>
 								<td><a target="_blank" href="{{menu.url}}">{{menu.url}}</a></td>
 							</tr>
 							<tr v-repeat="sub: menu.sub_button">
-									<td align="center"><a title="编辑" href="javascript:;"
-									v-on="click:data_edit(sub)"><i
-										class="fa fa-edit  text-success fa-lg"></i></a> &nbsp;&nbsp; <a
-									title="删除" v-on="click:data_delete(sub)" href="javascript:;"><i
-										class="fa fa-trash fa-lg text-danger"></i></a> &nbsp;&nbsp; <template
-										v-if="menu.hasChild"> <a title="展开"
-										v-on="click:toggle(sub)" href="javascript:;"><i
-										class="fa fa-{{sub.expand?'minus':'plus'}}"></i></a> </template> <template
-										v-if="!menu.hasChild"> <a title="展开"
-										href="javascript:;"><i class="fa fa-minus"></i></a> </template>
-									&nbsp;&nbsp;&nbsp;{{$index+1}}</td>
+								<td align="center">
+									<a title="编辑" href="javascript:;" v-on="click:data_edit(sub)">
+										<i class="fa fa-edit  text-success fa-lg"></i>
+									</a> &nbsp;&nbsp;
+									<a title="删除" v-on="click:data_delete(sub)" href="javascript:;">
+										<i class="fa fa-trash fa-lg text-danger"></i>
+									</a> &nbsp;&nbsp;{{$index+1}}
+								</td>
 								<td class="text-primary" style="font-weight: bold;">二级菜单</td>
 								<td>{{sub.type}}</td>
 								<td>{{sub.name}}</td>

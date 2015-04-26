@@ -28,22 +28,23 @@ public class LoginModule {
 	private UserService service;
 	@Inject("menuService")
 	private MenuService mservice;
-	
+
 	// 登录页面
 	@GET
 	@At("/login")
 	@Ok("->:/")
-	public void loginPage() {	}
-	
+	public void loginPage() {
+	}
+
 	// 登录页面
-		@POST
-		@At("/login")
-		@Ok(">>:/home")
-		public Object login(@Param("..")User user,HttpSession session) {
-			service.login(user);
-			session.setAttribute("login", service.rs);
-			return null;
-		}
+	@POST
+	@At("/login")
+	@Ok(">>:/home")
+	public Object login(@Param("..") User user, HttpSession session) {
+		service.login(user);
+		session.setAttribute("login", service.rs);
+		return null;
+	}
 
 	// 用户密码修改
 	@At("/changePassword")

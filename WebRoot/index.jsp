@@ -37,12 +37,11 @@
 </style>
 </head>
 
-<body>
+<body style="background: url(assets/image/OS_X_10_906.jpg) center no-repeat;">
 
-	<div class="container" style="padding-top: 5%;">
-
-		<form class="form-signin" action="login" method="post">
-			<h3 class="pull-right inline">UPS管理系统</h3>
+	<div class="container" style="margin-top: 5%;">
+		<form class="form-signin" style="background:rgba(3,3,3,0.2);border-radius:10px; ">
+			<h3 class="pull-right inline" style="color: #fff;font-weight: bold;">UPS管理系统</h3>
 			<h2 class="form-signin-heading text-primary">
 				<i class="glyphicon glyphicon-user"></i>
 			</h2>
@@ -54,10 +53,9 @@
 				placeholder="密码" required>
 			<div class="checkbox">
 				<label> <!-- <input type="checkbox" value="remember-me"> 记住我 -->
-
 				</label> <span id="msg" class="pull-right text-danger">${login.msg}</span>
 			</div>
-			<button class="btn btn-lg btn-primary btn-block" type="submit"
+			<button class="btn btn-lg btn-primary btn-block" type="button"
 				id="login">
 				<i class="fa fa-sign-in "></i>&nbsp;登录
 			</button>
@@ -67,6 +65,7 @@
 			%>
 		</form>
 
+
 	</div>
 	<!-- /container -->
 
@@ -74,7 +73,7 @@
 	<script src="assets/js/ie10-viewport-bug-workaround.js"></script>
 
 	<script type="text/javascript">
-		$("login").click(function() {
+		$("#login").click(function() {
 			$.ajax({
 				url : "login",
 				type : "POST",
