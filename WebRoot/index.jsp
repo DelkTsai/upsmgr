@@ -37,7 +37,7 @@
 </style>
 </head>
 
-<body style="background: url(assets/image/OS_X_10_906.jpg) center no-repeat;">
+<body style="background: url(assets/image/OS_X_10_906.jpg) no-repeat;background-size:cover;">
 
 	<div class="container" style="margin-top: 5%;">
 		<form class="form-signin" style="background:rgba(3,3,3,0.2);border-radius:10px; ">
@@ -79,6 +79,7 @@
 				type : "POST",
 				data : $("form").serialize(),
 				error : function(request) {
+					if(request.status==200)
 					window.location = "home";
 				},
 				dataType : "json",

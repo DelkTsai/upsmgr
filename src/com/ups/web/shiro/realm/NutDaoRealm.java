@@ -1,11 +1,6 @@
 package com.ups.web.shiro.realm;
 
-import com.ups.web.bean.Permission;
-import com.ups.web.bean.Role;
-import com.ups.web.bean.User;
-import com.ups.web.util.Toolkit;
-
-import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -24,8 +19,11 @@ import org.nutz.dao.Dao;
 import org.nutz.integration.shiro.CaptchaUsernamePasswordToken;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.lang.Strings;
 import org.nutz.mvc.Mvcs;
+
+import com.ups.web.bean.Permission;
+import com.ups.web.bean.Role;
+import com.ups.web.bean.User;
 
 /**
  * 用NutDao来实现Shiro的Realm
@@ -85,6 +83,8 @@ public class NutDaoRealm extends AuthorizingRealm {
             return null;
         if (user.isLocked()) 
             throw new LockedAccountException("Account [" + upToken.getUsername() + "] is locked.");
+        if (user.getUsername()==null||"".equals(user.getUsername())) 
+            throw new AccountException("用户名不能为空！");
         SimpleAccount account = new SimpleAccount(user.getId(), user.getPassword(), getName());
         account.setCredentialsSalt(ByteSource.Util.bytes(user.getSalt()));
         return account;

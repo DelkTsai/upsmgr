@@ -41,8 +41,6 @@ public class LoginModule {
 	@At("/login")
 	@Ok(">>:/home")
 	public Object login(@Param("..") User user, HttpSession session) {
-		service.login(user);
-		session.setAttribute("login", service.rs);
 		return null;
 	}
 
