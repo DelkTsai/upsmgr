@@ -13,7 +13,7 @@ import org.nutz.weixin.util.Wxs;
 
 import com.ups.web.service.MyWxHandler;
 
-@At({ "/weixin" })
+@At("/weixin")
 public class TestWeixin {
 
 	String encodingAesKey = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG";

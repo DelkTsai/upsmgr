@@ -80,8 +80,9 @@ public class WxUserModule {
 	@At("/edit")
 	@Ok("json")
 	// 返回json数据
-	public Object edit(@Param("..") Menu menu) {
-		return null;
+	public Object edit(String openid, String remark) {
+		WxResp resps = api.user_info_updatemark(openid, remark);
+		return resps;
 	}
 
 	// 用户删除

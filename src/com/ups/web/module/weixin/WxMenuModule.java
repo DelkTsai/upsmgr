@@ -1,5 +1,7 @@
 package com.ups.web.module.weixin;
 
+import java.util.List;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
@@ -9,6 +11,7 @@ import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.weixin.bean.WxMenu;
 
 import com.ups.web.bean.Menu;
 import com.ups.web.service.WxApi;
@@ -46,17 +49,9 @@ public class WxMenuModule {
 	@At("/add")
 	@Ok("json")
 	// 返回json数据
-	public Object add(@Param("..") NutMap menus) {
+	public Object create(@Param("..") List<WxMenu> menus) {
 		api.menu_create(menus);
 		return rs.setv("ok", true);
-	}
-
-	// 用户编辑
-	@At("/edit")
-	@Ok("json")
-	// 返回json数据
-	public Object edit(@Param("..") Menu menu) {
-		return null;
 	}
 
 	// 用户删除

@@ -90,18 +90,38 @@
 
 			<div class="col-xs-12 main">
 				<div class="page-header"></div>
-				<ul class="list-group list-inline col-sm-6 col-md-4 col-lg-3 text-center" v-repeat="user:page.list">
-					<li class="list-group-item text-left" style="color: #999;padding: 20px;min-width: 280px;">
-					<img  alt="头像"
-						src="{{user.headimgurl}}" width="120" height="120" align="left" style="margin-right: 20px;">
-						<span>昵称：{{user.nickname}}</span><br>
-						<span>性别：{{user.sex==0?"女":"男"}}</span><br>
-						<span>国家：{{user.country}}</span><br>
-						<span>城市：{{user.province}}</span><br>
-						<span>区县：{{user.city}}</span><br>
-						<span>备注：<input class="form-control" style="height: 20px;width: 50px;display: inline;" v-model="user.remark"></span>
-					</li>
-				</ul>
+				
+				<table class="table">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>头像</th>
+							<th>昵称</th>
+							<th>性别</th>
+							<th>备注</th>
+							<th>城市</th>
+							<th>省市</th>
+							<th>国籍</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-repeat="user:page.list">
+							<td style="vertical-align: middle;">{{$index+1}}</td>
+							<td style="vertical-align: middle;"><img alt="头像" src="{{user.headimgurl}}" style="width:50px;"></td>
+							<td style="vertical-align: middle;">{{user.nickname}}</td>
+							<td style="vertical-align: middle;">{{user.sex==0?"女":"男"}}</td>
+							<td style="vertical-align: middle;"><input class="form-control form-inline" v-model="user.remark" style="width:20%;min-width: 100px;"></td>
+							<td style="vertical-align: middle;">{{user.city}}</td>
+							<td style="vertical-align: middle;">{{user.province}}</td>
+							<td style="vertical-align: middle;">{{user.country}}</td>
+							<td style="vertical-align: middle;"><button class="btn btn-success" title="保存修改" v-on="click:data_save(user)"><i class="fa fa-save"></i></button></td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr></tr>
+					</tfoot>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -201,10 +221,9 @@
 						pageSize : this.page.pager.pageSize
 					});
 				},
-				data_save : function() {
-					$.post(this.isEdit ? "sys/menu/edit" : "sys/menu/add",
-							this.form, function(data) {
-								showSuccess(data.ok, data.msg);
+				data_save : function(user) {
+					$.post("weixin/user/edit",{openid:user.openid,remark:user.remark}, function(data) {
+								alert(JSON.stringify(data));
 							}, "json");
 				},
 

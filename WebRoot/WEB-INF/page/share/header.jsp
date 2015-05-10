@@ -91,5 +91,5 @@
 	};
 	
 	var data = ${obj};
-	var menu = ${menus}
+	var menu = ${menus};
 </script>
