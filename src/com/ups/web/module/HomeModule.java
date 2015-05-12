@@ -37,7 +37,7 @@ public class HomeModule {
 	public Object home(HttpSession session) {
 		mservice.find();
 		session.setAttribute("menus", mservice.rs.get("list"));
-		session.setAttribute("curruser", service.fetch(Integer.parseInt((String)session.getAttribute("me"))));
+		session.setAttribute("curruser", service.fetch((int)session.getAttribute("me")));
 		Pager pager = new Pager();
 		pager.setPageNumber(1);
 		pager.setPageSize(25);
