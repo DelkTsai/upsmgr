@@ -32,7 +32,7 @@
 					
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a><i class="fa fa-user" style="font-size: 18px;"></i>&nbsp;欢迎，${curruser.username}</a></li>
+					<li><a><i class="fa fa-user" style="font-size: 18px;"></i>&nbsp;欢迎，${ curruser.username }</a></li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-expanded="false">设置
 							<span class="caret"></span>

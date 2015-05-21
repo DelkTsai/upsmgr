@@ -53,7 +53,7 @@
 				placeholder="密码" required>
 			<div class="checkbox">
 				<label> <!-- <input type="checkbox" value="remember-me"> 记住我 -->
-				</label> <span id="msg" class="pull-right text-danger">${login.msg}</span>
+				</label> <span id="msg" class="pull-right "></span>
 			</div>
 			<button class="btn btn-lg btn-primary btn-block" type="button"
 				id="login">
@@ -61,7 +61,7 @@
 			</button>
 
 			<%
-				session.removeAttribute("login");
+				session.removeAttribute("msg");
 			%>
 		</form>
 
@@ -85,7 +85,7 @@
 				dataType : "json",
 				success : function(data) {
 					if (data && data.ok) {
-						window.location = "home";
+						window.location = "";
 					} else {
 						alert(data.msg);
 					}
